@@ -143,7 +143,7 @@ export default function App() {
           className="border p-2 h-1/2 rounded border-livepeer hover:bg-livepeer hover:text-white"
           onClick={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
         >
-          Reset Demo
+          Reset Demo!!!
         </button>
       </header>
       <AppBody
