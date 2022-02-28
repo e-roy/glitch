@@ -136,6 +136,7 @@ export default function App() {
           rel="noopener, nofollow"
           className="logo flex flex-col flex-1 lg:w-1/5"
         >
+
           <h1 className="font-bold text-xl">Glitch App</h1>
         </a>
 
@@ -143,7 +144,7 @@ export default function App() {
           className="border p-2 h-1/2 rounded border-livepeer hover:bg-livepeer hover:text-white"
           onClick={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
         >
-          Reset Demo
+          Reset Demo!!!
         </button>
       </header>
       <AppBody
