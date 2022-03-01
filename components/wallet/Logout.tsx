@@ -17,7 +17,7 @@ export const Logout = () => {
         onClick={() => {
           handleLogout();
         }}
-        className="p-2 border border-gray-600 rounded bg-sky-300 hover:bg-sky-400"
+        className="px-10 py-2 border text-secondary border-secondary rounded bg-backgroundLight hover:bg-secondary hover:text-backgroundDark"
       >
         Logout
       </button>
