@@ -10,6 +10,18 @@ module.exports = {
         livepeer: {
           DEFAULT: "#943CFF",
         },
+        primary: {
+          DEFAULT: "#df3154",
+        },
+        secondary: {
+          DEFAULT: "#ffce4e",
+        },
+        backgroundLight: {
+          DEFAULT: "#332934",
+        },
+        backgroundDark: {
+          DEFAULT: "#1c121f",
+        },
       },
     },
   },
