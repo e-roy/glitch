@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/session";
-import { AppHeader } from "../../components/layout";
+import { WebsiteLayout } from "../../components/layout";
 import { VideoPlayback } from "../../components/video";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
@@ -23,17 +23,20 @@ export interface IVideoItem {
 
 const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
   return (
-    <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
-      <AppHeader />
-      <h1>Veiwer page</h1>
-      {video.confirmed && (
-        <div>
-          confirmed user
-          <VideoPlayback video={video} />
-        </div>
-      )}
-      {!video.confirmed && <div>sorry you don't have access to this video</div>}
-    </main>
+    <WebsiteLayout>
+      <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
+        <h1>Veiwer page</h1>
+        {video.confirmed && (
+          <div>
+            confirmed user
+            <VideoPlayback video={video} />
+          </div>
+        )}
+        {!video.confirmed && (
+          <div>sorry you don't have access to this video</div>
+        )}
+      </main>
+    </WebsiteLayout>
   );
 };
 
