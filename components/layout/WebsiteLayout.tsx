@@ -1,13 +1,15 @@
 import { AppHeader } from "./AppHeader";
 import { Footer } from "./Footer";
-export const WebsiteLayout = ({ children }: { children: React.ReactNode }) => {
+type WebsiteLayoutProps = {
+  children: React.ReactNode;
+  sections?: { name: string }[];
+};
+export const WebsiteLayout = ({ children, sections }: WebsiteLayoutProps) => {
   return (
-    <>
-      <AppHeader />
-      <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
-        {children}
-      </main>
+    <body className="bg-backgroundDark pb-4 h-screen m-auto pt-24">
+      <AppHeader sections={sections} />
+      <main>{children}</main>
       <Footer />
-    </>
+    </body>
   );
 };

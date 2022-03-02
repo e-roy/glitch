@@ -23,7 +23,7 @@ export interface IVideoItem {
 
 const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
   return (
-    <WebsiteLayout>
+    <WebsiteLayout sections={[{name: 'Creator'}]}>
       <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
         <h1>Veiwer page</h1>
         {video.confirmed && (

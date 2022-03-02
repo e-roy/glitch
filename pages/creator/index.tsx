@@ -132,7 +132,7 @@ const CreatorPage: NextPage = () => {
   }, [state.appState]);
 
   return (
-    <WebsiteLayout>
+    <WebsiteLayout sections={[{name: 'Creator'}]}>
       <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
         <AppBody
           state={state}
