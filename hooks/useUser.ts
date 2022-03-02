@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Router from 'next/router'
 
 export const useUser = () => {
   const [address, setAddress] = useState<string>()
