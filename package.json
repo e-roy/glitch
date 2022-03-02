@@ -22,6 +22,7 @@
     "react-dom": "17.0.2",
     "sass": "^1.32.8",
     "siwe": "^1.1.2",
+    "swr": "^1.2.2",
     "videojs-contrib-hls": "^5.15.0",
     "videojs-contrib-quality-levels": "^2.1.0",
     "videojs-hls-quality-selector": "^1.1.4",
