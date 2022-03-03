@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/session";
-import { AppHeader } from "../../components/layout";
+import { AppLayout, WebsiteLayout } from "../../components/layout";
 import { VideoPlayback } from "../../components/video";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
@@ -32,9 +32,11 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
   };
 
   return (
-    <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
-      <AppHeader />
-      {video.confirmed && (
+
+    <AppLayout sections={[{name: 'Creator'}]}>
+      <div className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
+       
+     {video.confirmed && (
         <div>
           <h2>Playback Id : {playbackId}</h2>
           <div className="flex my-4">
@@ -55,8 +57,11 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
           <VideoPlayback playbackId={playbackId} streamIsActive={true} />
         </div>
       )}
-      {!video.confirmed && <div>sorry you don't have access to this video</div>}
-    </main>
+        {!video.confirmed && (
+          <div>sorry you don't have access to this video</div>
+        )}
+      </div>
+    </AppLayout>
   );
 };
 
