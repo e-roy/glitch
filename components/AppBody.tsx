@@ -13,6 +13,7 @@ interface Props {
   state: any;
   setApiKey: (apiKey: string) => void;
   createStream: () => void;
+  setStreamKey: (streamKey: string) => void;
 }
 
 const copyTextToClipboard = (text: string) => {
@@ -23,10 +24,23 @@ const copyTextToClipboard = (text: string) => {
   });
 };
 
-const AppBody: React.FC<Props> = ({ state, setApiKey, createStream }) => {
+const AppBody: React.FC<Props> = ({
+  state,
+  setApiKey,
+  createStream,
+  setStreamKey,
+}) => {
   const { playbackId, streamIsActive, streamKey } = state;
   const [showRequest, setShowRequest] = React.useState(false);
   const [videoEl, setVideoEl] = React.useState(null);
+
+  // const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API;
+  // console.log(livepeerApi);
+
+  React.useEffect(() => {
+    console.log(streamKey);
+    setStreamKey(streamKey);
+  }, [streamKey]);
 
   const onVideo = React.useCallback((el) => {
     setVideoEl(el);

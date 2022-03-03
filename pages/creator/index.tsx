@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/session";
 import { AppHeader } from "../../components/layout";
@@ -68,6 +68,13 @@ const reducer = (state, action) => {
 
 const CreatorPage: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [streamKey, setStreamKey] = useState(null);
+  // const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API;
+  // console.log(livepeerApi);
+
+  useEffect(() => {
+    console.log("streamKey", streamKey);
+  }, [streamKey]);
 
   useEffect(() => {
     if (state.appState === APP_STATES.CREATING_STREAM) {
@@ -135,7 +142,7 @@ const CreatorPage: NextPage = () => {
   return (
     <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
       <AppHeader />
-      <WebCam />
+      <WebCam streamKey={streamKey} />
 
       <AppBody
         state={state}
@@ -143,6 +150,7 @@ const CreatorPage: NextPage = () => {
           dispatch({ type: "SUBMIT_API_KEY", payload: { apiKey } })
         }
         createStream={() => dispatch({ type: "CREATE_CLICKED" })}
+        setStreamKey={setStreamKey}
       />
       <footer className="fixed bottom-0 left-0 w-full h-20 flex items-center justify-center">
         <button

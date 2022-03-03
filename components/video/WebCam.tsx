@@ -1,11 +1,15 @@
 import { useEffect, useRef } from "react";
 import { Client } from "@livepeer/webrtmp-sdk";
 
-export const WebCam = () => {
+export type WebCamProps = {
+  streamKey: string;
+};
+
+export const WebCam = ({ streamKey }) => {
   const inputEl = useRef(null);
   const videoEl = useRef(null);
   const stream = useRef(null);
-
+  console.log("streamKey", streamKey);
   //   useEffect(() => {
   //     (async () => {
   //       videoEl.current.volume = 0;
@@ -21,20 +25,20 @@ export const WebCam = () => {
   //   });
 
   const onButtonClick = async () => {
-    const streamKey = inputEl.current.value;
-
+    const streamKey2 = inputEl.current.value;
+    console.log("stream", stream);
     if (!stream.current) {
       alert("Video stream was not started.");
     }
 
-    if (!streamKey) {
+    if (!streamKey2) {
       alert("Invalid streamKey.");
       return;
     }
 
     const client = new Client();
 
-    const session = client.cast(stream.current, streamKey);
+    const session = client.cast(stream.current, streamKey2);
 
     session.on("open", () => {
       console.log("Stream started.");
@@ -65,6 +69,7 @@ export const WebCam = () => {
         .getUserMedia({ video: true, audio: true })
         .then(function (stream) {
           console.log(stream);
+
           window.stream = stream; // stream available to console
           videoEl.current.volume = 0;
           videoEl.current.srcObject = stream;
@@ -84,6 +89,7 @@ export const WebCam = () => {
         type="text"
         placeholder="streamKey"
       />
+      {/* <video className="App-video" ref={videoEl} /> */}
       <video className="App-video" ref={videoEl} />
       <button
         className="border m-2 p-2 rounded bg-sky-200 hover:bg-sky-400"

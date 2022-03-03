@@ -6,6 +6,7 @@ import "videojs-hls-quality-selector";
 import "video.js/dist/video-js.min.css";
 
 export type VideoPlaybackProps = {
+  playbackId: string;
   video: IVideoItem;
 };
 
@@ -14,7 +15,7 @@ export interface IVideoItem {
   confirmed: boolean;
 }
 
-export const VideoPlayback = ({ video }: VideoPlaybackProps) => {
+export const VideoPlayback = ({ playbackId }: VideoPlaybackProps) => {
   const [videoEl, setVideoEl] = useState(null);
   const streamIsActive = true;
 
@@ -24,13 +25,13 @@ export const VideoPlayback = ({ video }: VideoPlaybackProps) => {
 
   useEffect(() => {
     if (videoEl == null) return;
-    if (streamIsActive && video.id) {
+    if (streamIsActive && playbackId) {
       const player = videojs(videoEl, {
         autoplay: true,
         controls: true,
         sources: [
           {
-            src: `https://cdn.livepeer.com/hls/${video.id}/index.m3u8`,
+            src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`,
           },
         ],
       });
@@ -38,10 +39,10 @@ export const VideoPlayback = ({ video }: VideoPlaybackProps) => {
       player.hlsQualitySelector();
 
       player.on("error", () => {
-        player.src(`https://cdn.livepeer.com/hls/${video.id}/index.m3u8`);
+        player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
       });
     }
-  }, [video]);
+  }, [playbackId]);
 
   return (
     <div>
