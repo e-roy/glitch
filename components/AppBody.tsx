@@ -1,4 +1,7 @@
 import React from "react";
+
+import { VideoPlayback } from "../components/video";
+
 import videojs from "video.js";
 import "videojs-contrib-hls";
 import "videojs-contrib-quality-levels";
@@ -38,9 +41,14 @@ const AppBody: React.FC<Props> = ({
   // console.log(livepeerApi);
 
   React.useEffect(() => {
-    console.log(streamKey);
+    // console.log(streamKey);
     setStreamKey(streamKey);
   }, [streamKey]);
+
+  React.useEffect(() => {
+    console.log("playbackId", playbackId);
+    console.log("streamIsActive", streamIsActive);
+  }, [playbackId, streamIsActive]);
 
   const onVideo = React.useCallback((el) => {
     setVideoEl(el);
@@ -54,6 +62,7 @@ const AppBody: React.FC<Props> = ({
         controls: true,
         sources: [
           {
+            // src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`,
             src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`,
           },
         ],
@@ -62,6 +71,7 @@ const AppBody: React.FC<Props> = ({
       player.hlsQualitySelector();
 
       player.on("error", () => {
+        // player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
         player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
       });
     }
@@ -139,6 +149,11 @@ const AppBody: React.FC<Props> = ({
       );
       return (
         <div className="container w-full flex flex-col items-center overflow-auto pb-14">
+          {/* <VideoPlayback
+            playbackId={playbackId}
+            streamIsActive={streamIsActive}
+          /> */}
+
           <div className="relative bg-black h-56 lg:h-96 w-full xl:w-3/5 overflow-hidden">
             <div data-vjs-player>
               <video
@@ -159,11 +174,6 @@ const AppBody: React.FC<Props> = ({
             </div>
           </div>
 
-          <div className="w-11/12 lg:w-full xl:w-3/5 lg:p-0 mt-2 text-red-500 text-left text-sm">
-            <span className="font-bold">Note:&nbsp;</span> To start a video
-            stream, please use a broadcaster software like OBS/Streamyard on
-            desktop, or Larix on mobile
-          </div>
           <div className="w-11/12 lg:w-full xl:w-3/5 border border-dashed p-2 m-4 flex flex-col text-sm">
             <div className="flex items-center justify-between mt-2 break-all">
               <span>
@@ -195,6 +205,19 @@ const AppBody: React.FC<Props> = ({
             </div>
             <div className="flex items-center justify-between mt-2 break-all">
               <span>
+                Playback ID:
+                <br />
+                {playbackId}
+              </span>
+              <button
+                onClick={() => copyTextToClipboard(`${playbackId}`)}
+                className="border ml-1 p-1 rounded text-sm break-normal"
+              >
+                Copy
+              </button>
+            </div>
+            {/* <div className="flex items-center justify-between mt-2 break-all">
+              <span>
                 Playback URL:
                 <br />
                 https://cdn.livepeer.com/hls/{playbackId}/index.m3u8
@@ -209,7 +232,7 @@ const AppBody: React.FC<Props> = ({
               >
                 Copy
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="w-11/12 lg:w-full xl:w-3/5 flex flex-col items-center mt-8">
             <button

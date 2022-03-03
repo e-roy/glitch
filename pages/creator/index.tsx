@@ -72,9 +72,9 @@ const CreatorPage: NextPage = () => {
   // const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API;
   // console.log(livepeerApi);
 
-  useEffect(() => {
-    console.log("streamKey", streamKey);
-  }, [streamKey]);
+  // useEffect(() => {
+  //   console.log("streamKey", streamKey);
+  // }, [streamKey]);
 
   useEffect(() => {
     if (state.appState === APP_STATES.CREATING_STREAM) {

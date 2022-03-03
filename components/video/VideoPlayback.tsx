@@ -6,18 +6,16 @@ import "videojs-hls-quality-selector";
 import "video.js/dist/video-js.min.css";
 
 export type VideoPlaybackProps = {
-  playbackId: string;
-  video: IVideoItem;
+  playbackId: string | null;
+  streamIsActive?: boolean;
 };
 
-export interface IVideoItem {
-  id: string;
-  confirmed: boolean;
-}
-
-export const VideoPlayback = ({ playbackId }: VideoPlaybackProps) => {
+export const VideoPlayback = ({
+  playbackId,
+  streamIsActive,
+}: VideoPlaybackProps) => {
   const [videoEl, setVideoEl] = useState(null);
-  const streamIsActive = true;
+  // const streamIsActive = true;
 
   const onVideo = useCallback((el) => {
     setVideoEl(el);
@@ -45,7 +43,7 @@ export const VideoPlayback = ({ playbackId }: VideoPlaybackProps) => {
   }, [playbackId]);
 
   return (
-    <div>
+    <div className="relative bg-black h-56 lg:h-96 w-full xl:w-3/5 overflow-hidden">
       <div data-vjs-player>
         <video
           id="video"
@@ -54,6 +52,14 @@ export const VideoPlayback = ({ playbackId }: VideoPlaybackProps) => {
           controls
           playsInline
         />
+      </div>
+      <div className="bg-white rounded-xl flex items-center justify-center absolute right-2 top-2 p-1 text-xs">
+        <div
+          className={`animate-pulse ${
+            streamIsActive ? "bg-green-700" : "bg-yellow-600"
+          } h-2 w-2 mr-2 rounded-full`}
+        ></div>
+        {streamIsActive ? "Live" : "Waiting for Video"}
       </div>
     </div>
   );

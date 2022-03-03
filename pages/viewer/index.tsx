@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useState } from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/session";
 import { AppHeader } from "../../components/layout";
@@ -22,14 +23,36 @@ export interface IVideoItem {
 }
 
 const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
+  const [userInput, setUserInput] = useState("");
+  const [playbackId, setPlaybackId] = useState<string>("");
+
+  const handleCheckStream = () => {
+    console.log("check stream");
+    setPlaybackId(userInput);
+  };
+
   return (
     <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
       <AppHeader />
-      <h1>Veiwer page</h1>
       {video.confirmed && (
         <div>
-          confirmed user
-          <VideoPlayback video={video} />
+          <h2>Playback Id : {playbackId}</h2>
+          <div className="flex my-4">
+            <input
+              className="border px-2 py-1 rounded-lg"
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+            />
+            <button
+              className="border m-2 p-2 rounded bg-sky-200 hover:bg-sky-400"
+              onClick={() => handleCheckStream()}
+            >
+              check stream
+            </button>
+          </div>
+
+          <VideoPlayback playbackId={playbackId} streamIsActive={true} />
         </div>
       )}
       {!video.confirmed && <div>sorry you don't have access to this video</div>}

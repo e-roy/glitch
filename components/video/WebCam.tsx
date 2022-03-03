@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Client } from "@livepeer/webrtmp-sdk";
 
 export type WebCamProps = {
@@ -6,39 +6,32 @@ export type WebCamProps = {
 };
 
 export const WebCam = ({ streamKey }) => {
-  const inputEl = useRef(null);
-  const videoEl = useRef(null);
-  const stream = useRef(null);
-  console.log("streamKey", streamKey);
-  //   useEffect(() => {
-  //     (async () => {
-  //       videoEl.current.volume = 0;
+  const videoEl = useRef<any>(null);
+  const stream = useRef<any>(null);
+  // const [createSession, setCreateSession] = useState(null);
+  let createSession = useRef<any>(null);
 
-  //       stream.current = await navigator.mediaDevices.getUserMedia({
-  //         video: true,
-  //         audio: true,
-  //       });
-
-  //       videoEl.current.srcObject = stream.current;
-  //       videoEl.current.play();
-  //     })();
-  //   });
+  useEffect(() => {
+    console.log("stream", stream);
+    console.log("createSession", createSession);
+  }, [stream, createSession]);
 
   const onButtonClick = async () => {
-    const streamKey2 = inputEl.current.value;
-    console.log("stream", stream);
     if (!stream.current) {
       alert("Video stream was not started.");
     }
 
-    if (!streamKey2) {
+    if (!streamKey) {
       alert("Invalid streamKey.");
       return;
     }
 
     const client = new Client();
 
-    const session = client.cast(stream.current, streamKey2);
+    const session = client.cast(stream.current, streamKey);
+    createSession = client.cast(stream.current, streamKey);
+
+    console.log("session", session);
 
     session.on("open", () => {
       console.log("Stream started.");
@@ -55,41 +48,31 @@ export const WebCam = ({ streamKey }) => {
   };
 
   const handleStop = () => {
-    console.log(window);
+    // turn off camera and audio
     if (window.stream) {
       window.stream.getTracks().forEach(function (track) {
+        // console.log("track", track);
         track.stop();
       });
     }
   };
 
-  const handleStartCamera = () => {
+  const handleStartCamera = async () => {
+    // turn on camera and audio
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then(function (stream) {
-          console.log(stream);
-
-          window.stream = stream; // stream available to console
-          videoEl.current.volume = 0;
-          videoEl.current.srcObject = stream;
-          videoEl.current.play();
-        })
-        .catch(function (error) {
-          console.log("Something went wrong!" + error);
-        });
+      videoEl.current.volume = 0;
+      stream.current = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      window.stream = stream.current;
+      videoEl.current.srcObject = stream.current;
+      videoEl.current.play();
     }
   };
 
   return (
     <div className="App">
-      <input
-        className="App-input"
-        ref={inputEl}
-        type="text"
-        placeholder="streamKey"
-      />
-      {/* <video className="App-video" ref={videoEl} /> */}
       <video className="App-video" ref={videoEl} />
       <button
         className="border m-2 p-2 rounded bg-sky-200 hover:bg-sky-400"
@@ -102,13 +85,13 @@ export const WebCam = ({ streamKey }) => {
         className="border m-2 p-2 rounded bg-sky-200 hover:bg-sky-400"
         onClick={handleStartCamera}
       >
-        Start Camera
+        Turn on Camera
       </button>
       <button
         className="border m-2 p-2 rounded bg-sky-200 hover:bg-sky-400"
         onClick={handleStop}
       >
-        Stop Camera
+        Turn off Camera
       </button>
     </div>
   );
