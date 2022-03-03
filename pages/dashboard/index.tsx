@@ -1,14 +1,12 @@
+import { AppLayout } from "components/layout";
+import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/session";
-// import { AppHeader } from "../../components/layout";
-import { Logout } from "../../components/wallet";
-import { WebsiteLayout } from "components/layout";
 
 const DashboardPage: NextPage = () => {
   return (
-    <WebsiteLayout sections={[{name: 'Dashboard'}]}>
+    <AppLayout sections={[{name: 'Dashboard'}]}>
       <div className="m-4 flex justify-center">
         <div className="bg-backgroundLight h-96 w-1/5 flex items-end">
           <Link href="/viewer">
@@ -25,7 +23,7 @@ const DashboardPage: NextPage = () => {
           </Link>
         </div>
       </div>
-    </WebsiteLayout>
+    </AppLayout>
   );
 };
 
