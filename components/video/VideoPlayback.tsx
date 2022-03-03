@@ -53,7 +53,7 @@ export const VideoPlayback = ({
           playsInline
         />
       </div>
-      <div className="bg-white rounded-xl flex items-center justify-center absolute right-2 top-2 p-1 text-xs">
+      <div className="bg-white text-stone-700 rounded-xl flex items-center justify-center absolute right-2 top-2 p-1 text-xs">
         <div
           className={`animate-pulse ${
             streamIsActive ? "bg-green-700" : "bg-yellow-600"
