@@ -6,17 +6,16 @@ import "videojs-hls-quality-selector";
 import "video.js/dist/video-js.min.css";
 
 export type VideoPlaybackProps = {
-  video: IVideoItem;
+  playbackId: string | null;
+  streamIsActive?: boolean;
 };
 
-export interface IVideoItem {
-  id: string;
-  confirmed: boolean;
-}
-
-export const VideoPlayback = ({ video }: VideoPlaybackProps) => {
+export const VideoPlayback = ({
+  playbackId,
+  streamIsActive,
+}: VideoPlaybackProps) => {
   const [videoEl, setVideoEl] = useState(null);
-  const streamIsActive = true;
+  // const streamIsActive = true;
 
   const onVideo = useCallback((el) => {
     setVideoEl(el);
@@ -24,13 +23,13 @@ export const VideoPlayback = ({ video }: VideoPlaybackProps) => {
 
   useEffect(() => {
     if (videoEl == null) return;
-    if (streamIsActive && video.id) {
+    if (streamIsActive && playbackId) {
       const player = videojs(videoEl, {
         autoplay: true,
         controls: true,
         sources: [
           {
-            src: `https://cdn.livepeer.com/hls/${video.id}/index.m3u8`,
+            src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`,
           },
         ],
       });
@@ -38,13 +37,13 @@ export const VideoPlayback = ({ video }: VideoPlaybackProps) => {
       player.hlsQualitySelector();
 
       player.on("error", () => {
-        player.src(`https://cdn.livepeer.com/hls/${video.id}/index.m3u8`);
+        player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
       });
     }
-  }, [video]);
+  }, [playbackId]);
 
   return (
-    <div>
+    <div className="relative bg-black h-56 lg:h-96 w-full xl:w-3/5 overflow-hidden">
       <div data-vjs-player>
         <video
           id="video"
@@ -53,6 +52,14 @@ export const VideoPlayback = ({ video }: VideoPlaybackProps) => {
           controls
           playsInline
         />
+      </div>
+      <div className="bg-white text-stone-700 rounded-xl flex items-center justify-center absolute right-2 top-2 p-1 text-xs">
+        <div
+          className={`animate-pulse ${
+            streamIsActive ? "bg-green-700" : "bg-yellow-600"
+          } h-2 w-2 mr-2 rounded-full`}
+        ></div>
+        {streamIsActive ? "Live" : "Waiting for Video"}
       </div>
     </div>
   );

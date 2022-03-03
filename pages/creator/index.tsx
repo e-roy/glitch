@@ -1,9 +1,10 @@
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
-import { useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer } from "react";
 import AppBody from "../../components/AppBody";
 import { AppLayout } from "../../components/layout";
 import { ironOptions } from "../../lib/session";
+import { WebCam } from "../../components/video";
 import { createStream, getStreamStatus } from "../../utils/apiFactory";
 import { APP_STATES } from "../../utils/types";
 
@@ -67,6 +68,13 @@ const reducer = (state, action) => {
 
 const CreatorPage: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const [streamKey, setStreamKey] = useState(null);
+  // const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API;
+  // console.log(livepeerApi);
+
+  // useEffect(() => {
+  //   console.log("streamKey", streamKey);
+  // }, [streamKey]);
 
   useEffect(() => {
     if (state.appState === APP_STATES.CREATING_STREAM) {
@@ -133,12 +141,15 @@ const CreatorPage: NextPage = () => {
 
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
+
+      <WebCam streamKey={streamKey} />
       <AppBody
         state={state}
         setApiKey={(apiKey) =>
           dispatch({ type: "SUBMIT_API_KEY", payload: { apiKey } })
         }
         createStream={() => dispatch({ type: "CREATE_CLICKED" })}
+        setStreamKey={setStreamKey}
       />
       <div className="fixed bottom-0 left-0 w-full h-20 flex items-center justify-center">
         <button
