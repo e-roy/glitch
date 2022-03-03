@@ -3,6 +3,7 @@ import { useEffect, useReducer } from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/session";
 import { AppHeader } from "../../components/layout";
+import { WebCam } from "../../components/video";
 
 import { APP_STATES } from "../../utils/types";
 import AppBody from "../../components/AppBody";
@@ -134,6 +135,7 @@ const CreatorPage: NextPage = () => {
   return (
     <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
       <AppHeader />
+      <WebCam />
 
       <AppBody
         state={state}

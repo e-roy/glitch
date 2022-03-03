@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.2.5",
+    "@livepeer/webrtmp-sdk": "^0.2.3",
     "@openzeppelin/contracts": "^4.5.0",
     "axios": "^0.21.1",
     "ethers": "^5.5.4",
