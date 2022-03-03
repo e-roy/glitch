@@ -1,4 +1,5 @@
 import { AppHeader } from "./AppHeader";
+import { HowItWorks } from "./HowItWorks"
 import { Footer } from "./Footer";
 type WebsiteLayoutProps = {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ export const WebsiteLayout = ({ children, sections }: WebsiteLayoutProps) => {
     <div className="bg-backgroundDark min-h-screen text-stone-100">
       <AppHeader sections={sections} />
       <main>{children}</main>
+      <HowItWorks />
       <Footer />
     </div>
   );

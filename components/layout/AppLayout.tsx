@@ -1,5 +1,6 @@
 import { AppHeader } from "./AppHeader";
 import { Footer } from "./Footer";
+import { HowItWorks } from "./HowItWorks"
 type WebsiteLayoutProps = {
   children: React.ReactNode;
   sections?: { name: string }[];
