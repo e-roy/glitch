@@ -23,17 +23,17 @@ export const ConnectWallet = () => {
   return (
     <div>
       <button
-        className="p-2 border border-gray-600 rounded bg-sky-300 hover:bg-sky-400"
+        className="px-8 py-4 border text-secondary border-secondary rounded bg-backgroundLight hover:bg-secondary hover:text-backgroundDark"
         onClick={() => setIsModalOpen(true)}
       >
         Connect Wallet
       </button>
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <div className="bg-white">
+        <div className="bg-backgroundDark">
           {connectors.map((x) => (
             <button
               className={
-                "hover:bg-gray-100 text-gray-700 p-4 w-full rounded outline-0"
+                "hover:bg-backgroundLight p-4 w-full rounded outline-0"
               }
               disabled={!x.ready}
               key={x.name}
@@ -59,7 +59,7 @@ export const ConnectWallet = () => {
                   />
                 )}
               </div>
-              <div className={"text-gray-900 text-3xl font-bold my-4"}>
+              <div className={"text-secondary text-3xl font-bold my-4"}>
                 {x.name}
               </div>
               <div className={"text-gray-400 font-regular text-xl my-4"}>
