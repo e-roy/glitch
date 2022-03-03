@@ -5,16 +5,14 @@ import Link from "next/link";
 import { ironOptions } from "../../lib/session";
 
 import { Logout } from "../../components/wallet";
-import Image  from 'next/image'
+import Image from "next/image";
 import videocam from "./video-cam.png";
 import streamimg from "./stream-img.png";
 
-
 const DashboardPage: NextPage = () => {
   return (
-    <AppLayout sections={[{name: 'Dashboard'}]}>
+    <AppLayout sections={[{ name: "Dashboard" }]}>
       <div className="m-4 flex justify-center">
-      
         <div className="bg-backgroundLight w-1/5 grid place-items-center p-10 rounded-xl">
           <Image
             src={videocam}
@@ -24,12 +22,12 @@ const DashboardPage: NextPage = () => {
             className="rounded-lg"
           />
           <Link href="/viewer">
-            <button className="font-bold h-12 px-10 py-2 mx-auto mt-10 mb-10 border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark">
+            <button className="font-bold px-10 py-2 mx-auto mt-10 mb-10 border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark">
               View Stream
             </button>
           </Link>
         </div>
-        
+
         <div className="bg-backgroundLight w-1/5 grid place-items-center ml-20 p-10 rounded-xl">
           <Image
             src={streamimg}
