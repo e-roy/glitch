@@ -32,31 +32,29 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
   };
 
   return (
+    <AppLayout sections={[{ name: "Creator" }]}>
+      <div className="container m-auto">
+        {video.confirmed && (
+          <div>
+            <div className="flex my-4">
+              <h2 className="mx-4 pt-2 text-xl">Playback Id : {playbackId}</h2>
+              <input
+                className="border px-2 py-1 rounded-lg text-stone-800"
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+              />
+              <button
+                className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
+                onClick={() => handleCheckStream()}
+              >
+                check stream
+              </button>
+            </div>
 
-    <AppLayout sections={[{name: 'Creator'}]}>
-      <div className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
-       
-     {video.confirmed && (
-        <div>
-          <h2>Playback Id : {playbackId}</h2>
-          <div className="flex my-4">
-            <input
-              className="border px-2 py-1 rounded-lg"
-              type="text"
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-            />
-            <button
-              className="border m-2 p-2 rounded bg-sky-200 hover:bg-sky-400"
-              onClick={() => handleCheckStream()}
-            >
-              check stream
-            </button>
+            <VideoPlayback playbackId={playbackId} streamIsActive={true} />
           </div>
-
-          <VideoPlayback playbackId={playbackId} streamIsActive={true} />
-        </div>
-      )}
+        )}
         {!video.confirmed && (
           <div>sorry you don't have access to this video</div>
         )}
