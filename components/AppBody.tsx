@@ -1,4 +1,7 @@
 import React from "react";
+
+import { VideoPlayback } from "../components/video";
+
 import videojs from "video.js";
 import "videojs-contrib-hls";
 import "videojs-contrib-quality-levels";
@@ -13,6 +16,7 @@ interface Props {
   state: any;
   setApiKey: (apiKey: string) => void;
   createStream: () => void;
+  setStreamKey: (streamKey: string) => void;
 }
 
 const copyTextToClipboard = (text: string) => {
@@ -23,10 +27,28 @@ const copyTextToClipboard = (text: string) => {
   });
 };
 
-const AppBody: React.FC<Props> = ({ state, setApiKey, createStream }) => {
+const AppBody: React.FC<Props> = ({
+  state,
+  setApiKey,
+  createStream,
+  setStreamKey,
+}) => {
   const { playbackId, streamIsActive, streamKey } = state;
   const [showRequest, setShowRequest] = React.useState(false);
   const [videoEl, setVideoEl] = React.useState(null);
+
+  // const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API;
+  // console.log(livepeerApi);
+
+  React.useEffect(() => {
+    // console.log(streamKey);
+    setStreamKey(streamKey);
+  }, [streamKey]);
+
+  React.useEffect(() => {
+    console.log("playbackId", playbackId);
+    console.log("streamIsActive", streamIsActive);
+  }, [playbackId, streamIsActive]);
 
   const onVideo = React.useCallback((el) => {
     setVideoEl(el);
@@ -40,6 +62,7 @@ const AppBody: React.FC<Props> = ({ state, setApiKey, createStream }) => {
         controls: true,
         sources: [
           {
+            // src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`,
             src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`,
           },
         ],
@@ -48,6 +71,7 @@ const AppBody: React.FC<Props> = ({ state, setApiKey, createStream }) => {
       player.hlsQualitySelector();
 
       player.on("error", () => {
+        // player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
         player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
       });
     }
@@ -125,6 +149,11 @@ const AppBody: React.FC<Props> = ({ state, setApiKey, createStream }) => {
       );
       return (
         <div className="container w-full flex flex-col items-center overflow-auto pb-14">
+          {/* <VideoPlayback
+            playbackId={playbackId}
+            streamIsActive={streamIsActive}
+          /> */}
+
           <div className="relative bg-black h-56 lg:h-96 w-full xl:w-3/5 overflow-hidden">
             <div data-vjs-player>
               <video
@@ -145,52 +174,15 @@ const AppBody: React.FC<Props> = ({ state, setApiKey, createStream }) => {
             </div>
           </div>
 
-          <div className="w-11/12 lg:w-full xl:w-3/5 lg:p-0 mt-2 text-red-500 text-left text-sm">
-            <span className="font-bold">Note:&nbsp;</span> To start a video
-            stream, please use a broadcaster software like OBS/Streamyard on
-            desktop, or Larix on mobile
-          </div>
           <div className="w-11/12 lg:w-full xl:w-3/5 border border-dashed p-2 m-4 flex flex-col text-sm">
             <div className="flex items-center justify-between mt-2 break-all">
               <span>
-                Ingest URL:
+                Playback ID:
                 <br />
-                rtmp://rtmp.livepeer.com/live/
+                {playbackId}
               </span>
               <button
-                onClick={() =>
-                  copyTextToClipboard(`rtmp://rtmp.livepeer.com/live/`)
-                }
-                className="border ml-1 p-1 rounded text-sm break-normal"
-              >
-                Copy
-              </button>
-            </div>
-            <div className="flex items-center justify-between mt-2 break-all mb-6">
-              <span>
-                Stream Key:
-                <br />
-                {streamKey}
-              </span>
-              <button
-                onClick={() => copyTextToClipboard(streamKey)}
-                className="border ml-1 p-1 rounded text-sm break-normal"
-              >
-                Copy
-              </button>
-            </div>
-            <div className="flex items-center justify-between mt-2 break-all">
-              <span>
-                Playback URL:
-                <br />
-                https://cdn.livepeer.com/hls/{playbackId}/index.m3u8
-              </span>
-              <button
-                onClick={() =>
-                  copyTextToClipboard(
-                    `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`
-                  )
-                }
+                onClick={() => copyTextToClipboard(`${playbackId}`)}
                 className="border ml-1 p-1 rounded text-sm break-normal"
               >
                 Copy
