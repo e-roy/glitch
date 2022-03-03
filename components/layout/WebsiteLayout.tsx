@@ -6,9 +6,9 @@ type WebsiteLayoutProps = {
 };
 export const WebsiteLayout = ({ children, sections }: WebsiteLayoutProps) => {
   return (
-    <div className="bg-backgroundDark h-screen text-stone-100">
+    <div className="bg-backgroundDark min-h-screen text-stone-100">
       <AppHeader sections={sections} />
-      <main className="h-3/4 mt-24">{children}</main>
+      <main>{children}</main>
       <Footer />
     </div>
   );
