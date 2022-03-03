@@ -1,12 +1,12 @@
+import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import { useEffect, useReducer } from "react";
-import { withIronSessionSsr } from "iron-session/next";
-import { ironOptions } from "../../lib/session";
-import { AppHeader } from "../../components/layout";
-
-import { APP_STATES } from "../../utils/types";
 import AppBody from "../../components/AppBody";
+import { AppLayout } from "../../components/layout";
+import { ironOptions } from "../../lib/session";
 import { createStream, getStreamStatus } from "../../utils/apiFactory";
+import { APP_STATES } from "../../utils/types";
+
 
 const INITIAL_STATE = {
   appState: APP_STATES.API_KEY,
@@ -132,9 +132,7 @@ const CreatorPage: NextPage = () => {
   }, [state.appState]);
 
   return (
-    <main className="container pb-12 h-screen m-auto pt-24 lg:pt-40">
-      <AppHeader />
-
+    <AppLayout sections={[{ name: "Creator" }]}>
       <AppBody
         state={state}
         setApiKey={(apiKey) =>
@@ -142,14 +140,14 @@ const CreatorPage: NextPage = () => {
         }
         createStream={() => dispatch({ type: "CREATE_CLICKED" })}
       />
-      <footer className="fixed bottom-0 left-0 w-full h-20 flex items-center justify-center">
+      <div className="fixed bottom-0 left-0 w-full h-20 flex items-center justify-center">
         <button
           className="border p-2 h-1/2 rounded border-livepeer hover:bg-livepeer hover:text-white"
           onClick={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
         >
           Reset Demo
         </button>
-      </footer>
+      </div>
       {state.error && (
         <div className="bg-black bg-opacity-60 flex items-center justify-center fixed top-0 left-0 h-screen w-screen">
           <div className="flex flex-col w-1/3 h-56 bg-white p-12 items-center text-center text-lg rounded">
@@ -163,7 +161,7 @@ const CreatorPage: NextPage = () => {
           </div>
         </div>
       )}
-    </main>
+    </AppLayout>
   );
 };
 
