@@ -13,7 +13,7 @@ const DashboardPage: NextPage = () => {
   return (
     <AppLayout sections={[{ name: "Dashboard" }]}>
       <div className="m-4 flex justify-center">
-        <div className="bg-backgroundLight w-1/5 grid place-items-center p-10 rounded-xl">
+        <div className="bg-backgroundLight grid place-items-center p-10 rounded-xl">
           <Image
             src={videocam}
             width={150}
@@ -28,7 +28,7 @@ const DashboardPage: NextPage = () => {
           </Link>
         </div>
 
-        <div className="bg-backgroundLight w-1/5 grid place-items-center ml-20 p-10 rounded-xl">
+        <div className="bg-backgroundLight grid place-items-center ml-20 p-10 rounded-xl">
           <Image
             src={streamimg}
             width={150}
