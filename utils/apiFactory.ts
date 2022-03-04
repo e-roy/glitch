@@ -9,7 +9,8 @@ export const createStream = (apiKey: string): Promise<any> => {
   return apiInstance.post(
     "/stream",
     {
-      name: "test_stream",
+      name: "test_stream_util",
+      // record: true,
       profiles: [
         {
           name: "720p",
