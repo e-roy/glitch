@@ -2,8 +2,9 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/session";
-import { AppLayout, WebsiteLayout } from "../../components/layout";
-import { VideoPlayback } from "../../components/video";
+import { AppLayout } from "../../components/layout";
+import { VideoPlayer } from "../../components/video";
+import { ChatBody } from "../../components/chat";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
@@ -33,26 +34,37 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
 
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
-      <div className="container m-auto">
+      <div className="m-4">
         {video.confirmed && (
-          <div>
-            <div className="flex my-4">
-              <h2 className="mx-4 pt-2 text-xl">Playback Id : {playbackId}</h2>
-              <input
-                className="border px-2 py-1 rounded-lg text-stone-800"
-                type="text"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-              />
-              <button
-                className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
-                onClick={() => handleCheckStream()}
-              >
-                check stream
-              </button>
+          <div className="md:flex">
+            <div className="md:w-3/5">
+              <VideoPlayer playbackId={playbackId} streamIsActive={true} />
+              <div className="flex my-8">
+                <div className="w-full mr-4">
+                  <label htmlFor="playback-input" className="text-lg">
+                    Stream Key
+                  </label>
+                  <br />
+                  <input
+                    id="playback-input"
+                    className="border px-2 py-1 w-full rounded-lg text-stone-800"
+                    type="text"
+                    value={userInput}
+                    placeholder="Enter Playback Id"
+                    onChange={(e) => setUserInput(e.target.value)}
+                  />
+                </div>
+                <button
+                  className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
+                  onClick={() => handleCheckStream()}
+                >
+                  check stream
+                </button>
+              </div>
             </div>
-
-            <VideoPlayback playbackId={playbackId} streamIsActive={true} />
+            <div className="md:w-2/5 md:pl-4 lg:pl-16">
+              <ChatBody />
+            </div>
           </div>
         )}
         {!video.confirmed && (

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { VideoPlayback } from "../components/video";
+import { VideoPlayback, VideoPlayer } from "../components/video";
 
 import videojs from "video.js";
 import "videojs-contrib-hls";
@@ -148,12 +148,7 @@ const AppBody: React.FC<Props> = ({
         2
       );
       return (
-        <div className="container w-full flex flex-col items-center overflow-auto pb-14">
-          {/* <VideoPlayback
-            playbackId={playbackId}
-            streamIsActive={streamIsActive}
-          /> */}
-
+        <div className="container w-full flex flex-col items-center overflow-auto mx-auto pb-14">
           <div className="relative bg-black h-56 lg:h-96 w-full xl:w-3/5 overflow-hidden">
             <div data-vjs-player>
               <video

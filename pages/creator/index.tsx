@@ -5,9 +5,9 @@ import AppBody from "../../components/AppBody";
 import { AppLayout } from "../../components/layout";
 import { ironOptions } from "../../lib/session";
 import { WebCam } from "../../components/video";
+import { ChatBody } from "../../components/chat";
 import { createStream, getStreamStatus } from "../../utils/apiFactory";
 import { APP_STATES } from "../../utils/types";
-
 
 const INITIAL_STATE = {
   appState: APP_STATES.API_KEY,
@@ -141,8 +141,15 @@ const CreatorPage: NextPage = () => {
 
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
+      <div className="md:flex m-4 mb-12">
+        <div className="md:w-3/5">
+          <WebCam streamKey={streamKey} />
+        </div>
+        <div className="md:w-2/5 md:pl-4 lg:pl-16">
+          <ChatBody />
+        </div>
+      </div>
 
-      <WebCam streamKey={streamKey} />
       <AppBody
         state={state}
         setApiKey={(apiKey) =>
@@ -151,7 +158,7 @@ const CreatorPage: NextPage = () => {
         createStream={() => dispatch({ type: "CREATE_CLICKED" })}
         setStreamKey={setStreamKey}
       />
-      <div className="fixed bottom-0 left-0 w-full h-20 flex items-center justify-center">
+      <div className="bottom-0 left-0 w-full h-20 flex items-center justify-center">
         <button
           className="border p-2 h-1/2 rounded border-livepeer hover:bg-livepeer hover:text-white"
           onClick={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
