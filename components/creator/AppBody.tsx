@@ -6,14 +6,10 @@ import "videojs-contrib-quality-levels";
 import "videojs-hls-quality-selector";
 import "video.js/dist/video-js.min.css";
 
-import APIKeyForm from "./APIKeyForm";
-
 import { APP_STATES } from "../../utils/types";
 
 interface Props {
   state: any;
-  setApiKey: (apiKey: string) => void;
-  createStream: () => void;
   setStreamKey: (streamKey: string) => void;
 }
 
@@ -25,28 +21,20 @@ const copyTextToClipboard = (text: string) => {
   });
 };
 
-export const AppBody: React.FC<Props> = ({
-  state,
-  setApiKey,
-  createStream,
-  setStreamKey,
-}) => {
+export const AppBody: React.FC<Props> = ({ state, setStreamKey }) => {
   const { playbackId, streamIsActive, streamKey } = state;
   const [showRequest, setShowRequest] = React.useState(false);
   const [videoEl, setVideoEl] = React.useState(null);
-
-  // const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API;
-  // console.log(livepeerApi);
 
   React.useEffect(() => {
     // console.log(streamKey);
     setStreamKey(streamKey);
   }, [streamKey]);
 
-  React.useEffect(() => {
-    console.log("playbackId", playbackId);
-    console.log("streamIsActive", streamIsActive);
-  }, [playbackId, streamIsActive]);
+  // React.useEffect(() => {
+  //   console.log("playbackId", playbackId);
+  //   console.log("streamIsActive", streamIsActive);
+  // }, [playbackId, streamIsActive]);
 
   const onVideo = React.useCallback((el) => {
     setVideoEl(el);
@@ -60,7 +48,6 @@ export const AppBody: React.FC<Props> = ({
         controls: true,
         sources: [
           {
-            // src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`,
             src: `https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`,
           },
         ],
@@ -69,26 +56,12 @@ export const AppBody: React.FC<Props> = ({
       player.hlsQualitySelector();
 
       player.on("error", () => {
-        // player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
         player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
       });
     }
   }, [streamIsActive]);
 
   switch (state.appState) {
-    case APP_STATES.API_KEY:
-      return <APIKeyForm setApiKey={setApiKey} />;
-    case APP_STATES.CREATE_BUTTON:
-      return (
-        <div className="w-full h-3/5 flex items-center justify-center">
-          <button
-            className="text-2xl border border-black rounded p-2"
-            onClick={createStream}
-          >
-            Create Stream
-          </button>
-        </div>
-      );
     case APP_STATES.CREATING_STREAM:
       return (
         <div className="w-full h-3/5 flex flex-col items-center justify-center">

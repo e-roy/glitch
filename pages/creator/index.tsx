@@ -9,9 +9,11 @@ import { ChatBody } from "../../components/chat";
 import { createStream, getStreamStatus } from "../../utils/apiFactory";
 import { APP_STATES } from "../../utils/types";
 
+const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
+
 const INITIAL_STATE = {
-  appState: APP_STATES.API_KEY,
-  apiKey: null,
+  appState: APP_STATES.CREATE_BUTTON,
+  apiKey: livepeerApi,
   streamId: null,
   playbackId: null,
   streamKey: null,
@@ -21,12 +23,6 @@ const INITIAL_STATE = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "SUBMIT_API_KEY":
-      return {
-        ...state,
-        appState: APP_STATES.CREATE_BUTTON,
-        apiKey: action.payload.apiKey,
-      };
     case "CREATE_CLICKED":
       return {
         ...state,
@@ -56,11 +52,6 @@ const reducer = (state, action) => {
       return {
         ...INITIAL_STATE,
       };
-    case "INVALID_API_KEY":
-      return {
-        ...state,
-        error: action.payload.message,
-      };
     default:
       break;
   }
@@ -68,9 +59,7 @@ const reducer = (state, action) => {
 
 const CreatorPage: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const [streamKey, setStreamKey] = useState(null);
-  // const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API;
-  // console.log(livepeerApi);
+  const [streamKey, setStreamKey] = useState<string>("");
 
   // useEffect(() => {
   //   console.log("streamKey", streamKey);
@@ -102,7 +91,7 @@ const CreatorPage: NextPage = () => {
       })();
     }
 
-    let interval;
+    let interval: any;
     if (state.streamId) {
       interval = setInterval(async () => {
         const streamStatusResponse = await getStreamStatus(
@@ -111,6 +100,7 @@ const CreatorPage: NextPage = () => {
         );
         if (streamStatusResponse.data) {
           const { isActive } = streamStatusResponse.data;
+          // console.log("isActive", isActive);
           dispatch({
             type: isActive ? "VIDEO_STARTED" : "VIDEO_STOPPED",
           });
@@ -127,42 +117,25 @@ const CreatorPage: NextPage = () => {
     <AppLayout sections={[{ name: "Creator" }]}>
       <div className="md:flex m-4 mb-12">
         <div className="md:w-3/5">
-          <WebCam streamKey={streamKey} />
+          <WebCam
+            streamKey={streamKey}
+            createStream={() => dispatch({ type: "CREATE_CLICKED" })}
+          />
         </div>
         <div className="md:w-2/5 md:pl-4 lg:pl-16">
           <ChatBody />
         </div>
       </div>
 
-      <AppBody
-        state={state}
-        setApiKey={(apiKey) =>
-          dispatch({ type: "SUBMIT_API_KEY", payload: { apiKey } })
-        }
-        createStream={() => dispatch({ type: "CREATE_CLICKED" })}
-        setStreamKey={setStreamKey}
-      />
-      <div className="bottom-0 left-0 w-full h-20 flex items-center justify-center">
+      <AppBody state={state} setStreamKey={setStreamKey} />
+      {/* <div className="bottom-0 left-0 w-full h-20 flex items-center justify-center">
         <button
           className="border p-2 h-1/2 rounded border-livepeer hover:bg-livepeer hover:text-white"
           onClick={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
         >
           Reset Demo
         </button>
-      </div>
-      {state.error && (
-        <div className="bg-black bg-opacity-60 flex items-center justify-center fixed top-0 left-0 h-screen w-screen">
-          <div className="flex flex-col w-1/3 h-56 bg-white p-12 items-center text-center text-lg rounded">
-            {state.error}
-            <button
-              className="border p-2 w-1/3 rounded border-livepeer hover:bg-livepeer hover:text-white mt-4"
-              onClick={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
-            >
-              Retry
-            </button>
-          </div>
-        </div>
-      )}
+      </div> */}
     </AppLayout>
   );
 };
