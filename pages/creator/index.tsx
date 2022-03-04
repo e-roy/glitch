@@ -119,7 +119,8 @@ const CreatorPage: NextPage = () => {
         <div className="md:w-3/5">
           <WebCam
             streamKey={streamKey}
-            createStream={() => dispatch({ type: "CREATE_CLICKED" })}
+            createNewStream={() => dispatch({ type: "CREATE_CLICKED" })}
+            closeStream={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
           />
         </div>
         <div className="md:w-2/5 md:pl-4 lg:pl-16">

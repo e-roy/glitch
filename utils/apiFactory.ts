@@ -10,7 +10,7 @@ export const createStream = (apiKey: string): Promise<any> => {
     "/stream",
     {
       name: "test_stream_util",
-      // record: true,
+      record: true,
       profiles: [
         {
           name: "720p",
