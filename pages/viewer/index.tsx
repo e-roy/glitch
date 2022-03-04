@@ -36,11 +36,11 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
     <AppLayout sections={[{ name: "Creator" }]}>
       <div className="m-4">
         {video.confirmed && (
-          <div className="sm:flex">
-            <div className="sm:w-3/5 ">
+          <div className="md:flex">
+            <div className="md:w-3/5">
               <VideoPlayer playbackId={playbackId} streamIsActive={true} />
-              <div className="flex my-4 w-full">
-                <div>
+              <div className="flex my-8">
+                <div className="w-full mr-4">
                   <label htmlFor="playback-input" className="text-lg">
                     Stream Key
                   </label>
@@ -62,7 +62,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
                 </button>
               </div>
             </div>
-            <div className="sm:w-2/5">
+            <div className="md:w-2/5">
               <ChatBody />
             </div>
           </div>
