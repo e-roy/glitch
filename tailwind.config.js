@@ -22,7 +22,9 @@ module.exports = {
         backgroundDark: {
           DEFAULT: "#171717",
         },
-
+        footerLight: {
+          DEFAULT: "#96839B"
+        },
         backgroundBlur: {
           DEFAULT: "#D53D5C",
         },
