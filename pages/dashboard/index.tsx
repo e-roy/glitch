@@ -4,7 +4,6 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { ironOptions } from "../../lib/session";
 
-import { Logout } from "../../components/wallet";
 import Image from "next/image";
 import videocam from "./video-cam.png";
 import streamimg from "./stream-img.png";

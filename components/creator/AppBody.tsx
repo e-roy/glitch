@@ -1,7 +1,5 @@
 import React from "react";
 
-import { VideoPlayback, VideoPlayer } from "../components/video";
-
 import videojs from "video.js";
 import "videojs-contrib-hls";
 import "videojs-contrib-quality-levels";
@@ -10,7 +8,7 @@ import "video.js/dist/video-js.min.css";
 
 import APIKeyForm from "./APIKeyForm";
 
-import { APP_STATES } from "../utils/types";
+import { APP_STATES } from "../../utils/types";
 
 interface Props {
   state: any;
@@ -27,7 +25,7 @@ const copyTextToClipboard = (text: string) => {
   });
 };
 
-const AppBody: React.FC<Props> = ({
+export const AppBody: React.FC<Props> = ({
   state,
   setApiKey,
   createStream,

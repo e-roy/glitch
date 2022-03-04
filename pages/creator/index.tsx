@@ -1,7 +1,7 @@
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import { useState, useEffect, useReducer } from "react";
-import AppBody from "../../components/AppBody";
+import { AppBody } from "../../components/creator";
 import { AppLayout } from "../../components/layout";
 import { ironOptions } from "../../lib/session";
 import { WebCam } from "../../components/video";
@@ -97,23 +97,7 @@ const CreatorPage: NextPage = () => {
             });
           }
         } catch (error) {
-          if (error.response.status === 403) {
-            dispatch({
-              type: "INVALID_API_KEY",
-              payload: {
-                message:
-                  "Invalid API Key. Please try again with right API key!",
-              },
-            });
-          } else {
-            dispatch({
-              type: "INVALID_API_KEY",
-              payload: {
-                message:
-                  "Something went wrong! Please try again after sometime",
-              },
-            });
-          }
+          console.log("error", error);
         }
       })();
     }
