@@ -2,14 +2,14 @@
 
 Download all the dependencies needed to run the project by running `yarn`.
 
-    ```bash
-    yarn
-    ```
+```
+yarn
+```
 
-    Start your dev environment by running
+Start your dev environment by running
 
-    ```bash
-    yarn dev
-    ```
+```
+yarn dev
+```
 
-    Open [http://localhost:3000](http://localhost:3000/) with your browser.
+Open [http://localhost:3000](http://localhost:3000/) with your browser.

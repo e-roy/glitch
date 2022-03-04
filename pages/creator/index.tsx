@@ -5,9 +5,9 @@ import AppBody from "../../components/AppBody";
 import { AppLayout } from "../../components/layout";
 import { ironOptions } from "../../lib/session";
 import { WebCam } from "../../components/video";
+import { ChatBody } from "../../components/chat";
 import { createStream, getStreamStatus } from "../../utils/apiFactory";
 import { APP_STATES } from "../../utils/types";
-
 
 const INITIAL_STATE = {
   appState: APP_STATES.API_KEY,
@@ -141,8 +141,16 @@ const CreatorPage: NextPage = () => {
 
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
+      <div className="sm:flex m-4">
+        <div className="sm:w-3/5">
+          <WebCam streamKey={streamKey} />
+        </div>
+        <div className="sm:w-2/5">
+          <ChatBody />
+        </div>
+      </div>
 
-      <WebCam streamKey={streamKey} />
+      {/* <WebCam streamKey={streamKey} /> */}
       <AppBody
         state={state}
         setApiKey={(apiKey) =>
