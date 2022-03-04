@@ -5,7 +5,7 @@ import type { NextPage } from "next";
 const App: NextPage = () => {
   return (
     <WebsiteLayout>
-      <Hero/>
+      <Hero />
       <HowItWorks />
     </WebsiteLayout>
   );
