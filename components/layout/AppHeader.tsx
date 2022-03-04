@@ -34,7 +34,7 @@ export const AppHeader = ({ sections = defaultSections }: AppHeaderProps) => {
   }, [user, accountData]);
 
   return (
-    <header className="w-full px-10 py-4 flex justify-between items-center sticky top-0 left-0 z-10">
+    <header className="w-full px-10 py-4 flex justify-between items-center sticky top-0 left-0 z-10 font-work-sans">
       <Link href={user ? "/dashboard" : "/"}>
         <a>
           <Logo />

@@ -1,5 +1,5 @@
 export const Footer = () => (
-  <footer className="bg-backgroundLight flex flex-col md:flex-row md:space-x-32 mx-24 text-gray-100 px-8 py-6 justify-center text-center md:text-left">
+  <footer className="bg-backgroundLight flex flex-col md:flex-row md:space-x-32 mx-24 text-gray-100 px-8 py-6 justify-center text-center md:text-left font-work-sans">
     <div className="w-full  md:w-1/5  flex flex-col ">
       <p className="inline break-normal text-footerLight">
         Nec, enim sed lacus, magna pharetra. Phasellus tincidunt nulla pharetra
