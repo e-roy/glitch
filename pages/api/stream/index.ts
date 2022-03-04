@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * calls the /stream route of Livepeer.com APIs to create a new stream.
@@ -7,7 +8,7 @@ import axios from "axios";
  * Ingest URL: rtmp://rtmp.livepeer.com/live/{stream-key}
  * Playback URL: https://cdn.livepeer.com/hls/{playbackId}/index.m3u8
  */
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const authorizationHeader = req.headers && req.headers["authorization"];
     const streamName = req.body && req.body.name;

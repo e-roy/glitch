@@ -52,12 +52,13 @@ export const AppBody: React.FC<Props> = ({ state, setStreamKey }) => {
           },
         ],
       });
+      if (player) {
+        player.hlsQualitySelector();
 
-      player.hlsQualitySelector();
-
-      player.on("error", () => {
-        player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
-      });
+        player.on("error", () => {
+          player.src(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
+        });
+      }
     }
   }, [streamIsActive]);
 
@@ -82,7 +83,7 @@ export const AppBody: React.FC<Props> = ({ state, setStreamKey }) => {
       const body = JSON.stringify(
         {
           name: "test_stream_appbody",
-          // record: true,
+          record: true,
           profiles: [
             {
               name: "720p",

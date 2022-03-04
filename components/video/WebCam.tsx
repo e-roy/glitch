@@ -4,10 +4,15 @@ import { VideoCameraIcon, DesktopComputerIcon } from "@heroicons/react/outline";
 
 export type WebCamProps = {
   streamKey: string;
-  createStream: () => void;
+  createNewStream: () => void;
+  closeStream: () => void;
 };
 
-export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
+export const WebCam = ({
+  streamKey,
+  createNewStream,
+  closeStream,
+}: WebCamProps) => {
   const videoEl = useRef<any>(null);
   const stream = useRef<any>(null);
 
@@ -21,7 +26,7 @@ export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
   //   console.log("testBlankStream", testBlankStream);
   // }, [stream]);
 
-  const onButtonClick = async () => {
+  const handleStartStream = async () => {
     if (!stream.current) {
       alert("Video stream was not started.");
     }
@@ -59,6 +64,9 @@ export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
         track.stop();
       });
     }
+    closeStream();
+    setStreamCreated(false);
+    setStreamIsActive(false);
   };
 
   const handleStartCamera = async () => {
@@ -84,11 +92,11 @@ export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
     };
 
     if (navigator.mediaDevices.getDisplayMedia) {
-      console.log("stream current", stream.current);
+      // console.log("stream current", stream.current);
       stream.current = await navigator.mediaDevices.getDisplayMedia(
         displayMediaStreamConstraints
       );
-      console.log("stream current", stream.current);
+      // console.log("stream current", stream.current);
 
       window.stream = stream.current;
       videoEl.current.srcObject = stream.current;
@@ -152,7 +160,7 @@ export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
             <button
               className="font-bold px-4 py-3 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
               onClick={() => {
-                createStream();
+                createNewStream();
                 setStreamCreated(true);
               }}
             >
@@ -164,7 +172,7 @@ export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
                 <button
                   // disabled={!cameraOn}
                   onClick={() => {
-                    onButtonClick();
+                    handleStartStream();
                   }}
                   className="font-bold px-4 py-3 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
                 >
