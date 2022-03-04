@@ -5,7 +5,7 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {  
+    extend: {
       fontFamily: {
         "work-sans": ["Work Sans", ...defaultTheme.fontFamily.sans],
         "oxanium": ["Oxanium"]
@@ -30,7 +30,7 @@ module.exports = {
           DEFAULT: "#96839B"
         },
         backgroundBlur: {
-          DEFAULT: "#D53D5C",
+          DEFAULT: "#E03054",
         },
 
       },
