@@ -1,5 +1,4 @@
 import { AppHeader } from "./AppHeader";
-import { HowItWorks } from "./HowItWorks"
 import { Footer } from "./Footer";
 type WebsiteLayoutProps = {
   children: React.ReactNode;
