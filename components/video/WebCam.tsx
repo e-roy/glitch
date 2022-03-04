@@ -72,30 +72,44 @@ export const WebCam = ({ streamKey }) => {
   };
 
   return (
-    <div className="App">
-      <video
-        className="App-video border border-stone-200 rounded"
-        ref={videoEl}
-      />
-      <button
-        className="font-bold px-10 py-2 mx-auto mt-10 mb-10 border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
-        onClick={onButtonClick}
-      >
-        Start Stream
-      </button>
+    <div className="">
+      <div className=" rounded content-center justify-center h-96">
+        <video className="mx-auto" ref={videoEl} />
+      </div>
+      <div className="flex justify-between bg-backgroundLight w-full p-2 mt-28 rounded mx-8">
+        <div>
+          <button className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark">
+            xxx
+          </button>
+        </div>
 
-      <button
-        className="font-bold px-10 py-2 mx-auto mt-10 mb-10 border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
-        onClick={handleStartCamera}
-      >
-        Turn on Camera
-      </button>
-      <button
-        className="font-bold px-10 py-2 mx-auto mt-10 mb-10 border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
-        onClick={handleStop}
-      >
-        Turn off Camera
-      </button>
+        <div>
+          <button
+            className="font-bold px-10 py-2 mx-auto  border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
+            onClick={onButtonClick}
+          >
+            Start Stream
+          </button>
+
+          <button
+            className="font-bold px-10 py-2 mx-auto  border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
+            onClick={handleStartCamera}
+          >
+            on
+          </button>
+          <button
+            className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
+            onClick={handleStop}
+          >
+            off
+          </button>
+        </div>
+        <div>
+          <button className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark">
+            xxx
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

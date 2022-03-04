@@ -3,14 +3,17 @@ import { ChatMessage, ChatMessageInput } from "./";
 
 const messages = [
   {
+    cid: 1,
     name: "John Doe",
     message: "Hello, how are you?",
   },
   {
+    cid: 2,
     name: "Jane Doe",
     message: "Doing good, how about you?",
   },
   {
+    cid: 3,
     name: "John Doe",
     message: "I am doing great, thank you!",
   },

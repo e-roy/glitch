@@ -62,7 +62,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
                 </button>
               </div>
             </div>
-            <div className="md:w-2/5">
+            <div className="md:w-2/5 md:pl-4 lg:pl-16">
               <ChatBody />
             </div>
           </div>

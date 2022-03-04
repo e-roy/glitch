@@ -1,4 +1,5 @@
 export type ChatMessageProps = {
+  cid: string | number;
   name: string;
   message: string;
 };
