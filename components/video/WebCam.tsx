@@ -4,21 +4,21 @@ import { VideoCameraIcon, DesktopComputerIcon } from "@heroicons/react/outline";
 
 export type WebCamProps = {
   streamKey: string;
+  createStream: () => void;
 };
 
-export const WebCam = ({ streamKey }) => {
+export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
   const videoEl = useRef<any>(null);
   const stream = useRef<any>(null);
-  // const [createSession, setCreateSession] = useState(null);
-  let createSession = useRef<any>(null);
 
+  const [streamCreated, setStreamCreated] = useState(false);
   const [cameraOn, setCameraOn] = useState(false);
   const [streamIsActive, setStreamIsActive] = useState(false);
 
-  useEffect(() => {
-    console.log("stream", stream);
-    console.log("createSession", createSession);
-  }, [stream, createSession]);
+  // useEffect(() => {
+  //   console.log("stream", stream);
+  //   console.log("createSession", createSession);
+  // }, [stream, createSession]);
 
   const onButtonClick = async () => {
     if (!stream.current) {
@@ -31,11 +31,7 @@ export const WebCam = ({ streamKey }) => {
     }
 
     const client = new Client();
-
     const session = client.cast(stream.current, streamKey);
-    createSession = client.cast(stream.current, streamKey);
-
-    console.log("session", createSession);
 
     session.on("open", () => {
       console.log("Stream started.");
@@ -148,25 +144,39 @@ export const WebCam = ({ streamKey }) => {
           </button>
         </div>
         <div>
-          {!streamIsActive ? (
+          {!streamCreated ? (
             <button
-              // disabled={!cameraOn}
-              onClick={() => {
-                onButtonClick();
-              }}
               className="font-bold px-4 py-3 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
+              onClick={() => {
+                createStream();
+                setStreamCreated(true);
+              }}
             >
-              Start Stream
+              Create Stream
             </button>
           ) : (
-            <button
-              onClick={() => {
-                handleStop();
-              }}
-              className="font-bold px-4 py-3 mx-auto border rounded text-sm border-red-600 bg-red-500 hover:bg-red-600  text-stone-200 hover:text-stone-100"
-            >
-              Stop Stream
-            </button>
+            <>
+              {!streamIsActive ? (
+                <button
+                  // disabled={!cameraOn}
+                  onClick={() => {
+                    onButtonClick();
+                  }}
+                  className="font-bold px-4 py-3 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
+                >
+                  Start Stream
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    handleStop();
+                  }}
+                  className="font-bold px-4 py-3 mx-auto border rounded text-sm border-red-600 bg-red-500 hover:bg-red-600  text-stone-200 hover:text-stone-100"
+                >
+                  Stop Stream
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
