@@ -17,10 +17,10 @@ module.exports = {
           DEFAULT: "#ffce4e",
         },
         backgroundLight: {
-          DEFAULT: "#332934",
+          DEFAULT: "#3d2942",
         },
         backgroundDark: {
-          DEFAULT: "#1c121f",
+          DEFAULT: "#171717",
         },
       },
     },
