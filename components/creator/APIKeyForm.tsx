@@ -4,7 +4,7 @@ interface Props {
   setApiKey: (apiKey: string) => void;
 }
 
-const APIKeyForm: React.FC<Props> = ({ setApiKey }) => {
+export const APIKeyForm: React.FC<Props> = ({ setApiKey }) => {
   const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API;
 
   React.useEffect(() => {
