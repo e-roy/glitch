@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { Client } from "@livepeer/webrtmp-sdk";
 import { VideoCameraIcon, DesktopComputerIcon } from "@heroicons/react/outline";
 
@@ -17,8 +17,9 @@ export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
 
   // useEffect(() => {
   //   console.log("stream", stream);
-  //   console.log("createSession", createSession);
-  // }, [stream, createSession]);
+  //   let testBlankStream = new MediaStream();
+  //   console.log("testBlankStream", testBlankStream);
+  // }, [stream]);
 
   const onButtonClick = async () => {
     if (!stream.current) {
@@ -83,9 +84,12 @@ export const WebCam = ({ streamKey, createStream }: WebCamProps) => {
     };
 
     if (navigator.mediaDevices.getDisplayMedia) {
+      console.log("stream current", stream.current);
       stream.current = await navigator.mediaDevices.getDisplayMedia(
         displayMediaStreamConstraints
       );
+      console.log("stream current", stream.current);
+
       window.stream = stream.current;
       videoEl.current.srcObject = stream.current;
       videoEl.current.play();

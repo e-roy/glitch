@@ -42,7 +42,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
               <div className="flex my-8">
                 <div className="w-full mr-4">
                   <label htmlFor="playback-input" className="text-lg">
-                    Stream Key
+                    Playback ID
                   </label>
                   <br />
                   <input

@@ -81,7 +81,8 @@ export const AppBody: React.FC<Props> = ({ state, setStreamKey }) => {
       );
       const body = JSON.stringify(
         {
-          name: "test_stream",
+          name: "test_stream_appbody",
+          // record: true,
           profiles: [
             {
               name: "720p",
