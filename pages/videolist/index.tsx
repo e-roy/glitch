@@ -55,8 +55,8 @@ const VideoListPage: NextPage<VideoListPageProps> = ({}) => {
           Streams to Watch
         </div>
         <div className="flex flex-wrap">
-          {streams.map((stream) => (
-            <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4">
+          {streams.map((stream, index) => (
+            <div key={index} className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4">
               <StreamCard stream={stream} />
             </div>
           ))}

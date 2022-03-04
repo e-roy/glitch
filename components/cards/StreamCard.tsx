@@ -53,9 +53,9 @@ const PlayIcon = () => {
       <g
         id="Icons"
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
       >
         <g id="Rounded" transform="translate(-753.000000, -955.000000)">
           <g id="AV" transform="translate(100.000000, 852.000000)">
@@ -100,9 +100,9 @@ const PauseIcon = () => {
       <g
         id="Icons"
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
       >
         <g id="Outlined" transform="translate(-310.000000, -955.000000)">
           <g id="Av" transform="translate(100.000000, 852.000000)">
