@@ -10,7 +10,6 @@ export const WebsiteLayout = ({ children, sections }: WebsiteLayoutProps) => {
     <div className="bg-backgroundDark min-h-screen text-stone-100">
       <AppHeader sections={sections} />
       <main>{children}</main>
-      <HowItWorks />
       <Footer />
     </div>
   );
