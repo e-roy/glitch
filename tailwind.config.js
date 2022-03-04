@@ -22,6 +22,9 @@ module.exports = {
         backgroundDark: {
           DEFAULT: "#1c121f",
         },
+        footerLight: {
+          DEFAULT: "#96839B"
+        }
       },
     },
   },
