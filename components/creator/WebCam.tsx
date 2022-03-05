@@ -1,15 +1,21 @@
 import { useRef, useState } from "react";
 import { Client } from "@livepeer/webrtmp-sdk";
 import { VideoCameraIcon, DesktopComputerIcon } from "@heroicons/react/outline";
+import { activateRecord } from "utils/apiFactory";
+import { PlayIcon, PauseIcon, StopIcon } from "components/icons";
+
+const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
 export type WebCamProps = {
   streamKey: string;
+  streamId: string;
   createNewStream: () => void;
   closeStream: () => void;
 };
 
 export const WebCam = ({
   streamKey,
+  streamId,
   createNewStream,
   closeStream,
 }: WebCamProps) => {
@@ -19,6 +25,7 @@ export const WebCam = ({
   const [streamCreated, setStreamCreated] = useState(false);
   const [cameraOn, setCameraOn] = useState(false);
   const [streamIsActive, setStreamIsActive] = useState(false);
+  const [recordStatus, setRecordStatus] = useState(false);
 
   // useEffect(() => {
   //   console.log("stream", stream);
@@ -65,7 +72,7 @@ export const WebCam = ({
       });
     }
     closeStream();
-    setStreamCreated(false);
+    // setStreamCreated(false);
     setStreamIsActive(false);
   };
 
@@ -102,6 +109,7 @@ export const WebCam = ({
       videoEl.current.srcObject = stream.current;
       videoEl.current.play();
     } else {
+      // fallback to getUserMedia
       stream.current = await navigator.getDisplayMedia(
         displayMediaStreamConstraints
       );
@@ -111,15 +119,37 @@ export const WebCam = ({
     }
   };
 
+  const handleRecord = async () => {
+    if (!stream.current) {
+      alert("Video stream was not started.");
+    }
+
+    if (!streamId) {
+      alert("Invalid streamKey.");
+      return;
+    }
+
+    if (recordStatus) {
+      setRecordStatus(false);
+      await activateRecord(livepeerApi, streamId, false);
+    } else {
+      setRecordStatus(true);
+      await activateRecord(livepeerApi, streamId, true);
+    }
+  };
+
   return (
     <div className="">
-      <div className=" rounded content-center justify-center h-96">
-        <video className="mx-auto" ref={videoEl} />
+      <div className=" rounded content-center justify-center">
+        <video className="mx-auto h-100" ref={videoEl} />
       </div>
-      <div className="flex justify-between bg-backgroundLight w-full p-2 mt-28 rounded mx-8">
+      <div className="flex justify-between bg-backgroundLight w-full p-2 mt-8 rounded">
         <div>
-          {/* <button className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark">
-            xxx
+          {/* <button
+            className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
+            onClick={handleRecord}
+          >
+            rec
           </button> */}
         </div>
 

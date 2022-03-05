@@ -10,7 +10,6 @@ export const createStream = (apiKey: string): Promise<any> => {
     "/stream",
     {
       name: "test_stream_util",
-      record: true,
       profiles: [
         {
           name: "720p",
@@ -54,4 +53,35 @@ export const getStreamStatus = (
       authorization: `Bearer ${apiKey}`,
     },
   });
+};
+
+export const getSessionData = (
+  apiKey: string,
+  streamId: string
+): Promise<any> => {
+  return apiInstance.get(`/session/${streamId}`, {
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${apiKey}`,
+    },
+  });
+};
+
+export const activateRecord = (
+  apiKey: string,
+  streamId: string,
+  record: boolean
+): Promise<any> => {
+  return apiInstance.patch(
+    `/record/${streamId}`,
+    {
+      record: record,
+    },
+    {
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${apiKey}`,
+      },
+    }
+  );
 };

@@ -1,10 +1,10 @@
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import { useState, useEffect, useReducer } from "react";
-import { AppBody } from "../../components/creator";
+import { VideoPreview, WebCam } from "../../components/creator";
 import { AppLayout } from "../../components/layout";
 import { ironOptions } from "../../lib/session";
-import { WebCam } from "../../components/video";
+// import { WebCam } from "../../components/video";
 import { ChatBody } from "../../components/chat";
 import { createStream, getStreamStatus } from "../../utils/apiFactory";
 import { APP_STATES } from "../../utils/types";
@@ -21,7 +21,7 @@ const INITIAL_STATE = {
   error: null,
 };
 
-const reducer = (state, action) => {
+const reducer = (state: any, action: any) => {
   switch (action.type) {
     case "CREATE_CLICKED":
       return {
@@ -60,10 +60,6 @@ const reducer = (state, action) => {
 const CreatorPage: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const [streamKey, setStreamKey] = useState<string>("");
-
-  // useEffect(() => {
-  //   console.log("streamKey", streamKey);
-  // }, [streamKey]);
 
   useEffect(() => {
     if (state.appState === APP_STATES.CREATING_STREAM) {
@@ -116,27 +112,20 @@ const CreatorPage: NextPage = () => {
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
       <div className="md:flex m-4 mb-12">
-        <div className="md:w-3/5">
+        <div className="md:w-3/5 mb-8 md:mb-0 xl:mx-4 2xl:mx-8">
           <WebCam
             streamKey={streamKey}
+            streamId={state.streamId}
             createNewStream={() => dispatch({ type: "CREATE_CLICKED" })}
             closeStream={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
           />
         </div>
-        <div className="md:w-2/5 md:pl-4 lg:pl-16">
+        <div className="md:w-2/5 md:pl-4 lg:pl-16 xl:mx-4 2xl:mx-8">
           <ChatBody />
         </div>
       </div>
 
-      <AppBody state={state} setStreamKey={setStreamKey} />
-      {/* <div className="bottom-0 left-0 w-full h-20 flex items-center justify-center">
-        <button
-          className="border p-2 h-1/2 rounded border-livepeer hover:bg-livepeer hover:text-white"
-          onClick={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
-        >
-          Reset Demo
-        </button>
-      </div> */}
+      <VideoPreview state={state} setStreamKey={setStreamKey} />
     </AppLayout>
   );
 };
