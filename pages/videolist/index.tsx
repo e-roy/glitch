@@ -47,9 +47,9 @@ const streams = [
 
 export type VideoListPageProps = {};
 
-const VideoListPage: NextPage<VideoListPageProps> = ({}) => {
+const VideoListPage: NextPage<VideoListPageProps> = ({ }) => {
   return (
-    <AppLayout sections={[{ name: "Creator" }]}>
+    <AppLayout sections={[{ name: "User Feed" }]}>
       <div className="mx-24">
         <div className="m-4 text-secondary text-2xl font-bold">
           Streams to Watch
