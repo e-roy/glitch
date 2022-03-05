@@ -36,18 +36,18 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
     setPlaybackId(userInput);
   };
 
-  useEffect(() => {
-    const checkStream = async () => {
-      const streamStatusResponse = await getStreamStatus(
-        livepeerApi,
-        testStreamId
-      );
-      console.log("streamStatusResponse", streamStatusResponse);
-      const sessionResponse = await getSessionData(livepeerApi, testStreamId);
-      console.log("sessionResponse", sessionResponse);
-    };
-    checkStream();
-  }, [testStreamId]);
+  // useEffect(() => {
+  //   const checkStream = async () => {
+  //     const streamStatusResponse = await getStreamStatus(
+  //       livepeerApi,
+  //       testStreamId
+  //     );
+  //     console.log("streamStatusResponse", streamStatusResponse);
+  //     const sessionResponse = await getSessionData(livepeerApi, testStreamId);
+  //     console.log("sessionResponse", sessionResponse);
+  //   };
+  //   checkStream();
+  // }, [testStreamId]);
 
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
