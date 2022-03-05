@@ -23,8 +23,8 @@ export const ChatBody = () => {
   const [activeUsers, setActiveUsers] = useState([]);
 
   return (
-    <div className="h-full rounded mx-4">
-      <div className="p-4 bg-backgroundLight text-secondary">
+    <div className="h-full rounded">
+      <div className="p-4 bg-backgroundLight font-bold text-secondary">
         Chat ({activeUsers.length})
       </div>
 

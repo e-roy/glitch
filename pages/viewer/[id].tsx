@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { withIronSessionSsr } from "iron-session/next";
 import { ironOptions } from "../../lib/session";
 import { AppLayout } from "../../components/layout";
 import { VideoPlayer } from "../../components/video";
 import { ChatBody } from "../../components/chat";
+import { getStreamStatus, getSessionData } from "../../utils/apiFactory";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
@@ -13,6 +14,9 @@ const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
   `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
 );
+
+const testStreamId = "e37c76ec-fa73-468b-80c9-d34540465144";
+const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
 export type ViewerPageProps = {
   video: IVideoItem;
@@ -31,6 +35,19 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
     console.log("check stream");
     setPlaybackId(userInput);
   };
+
+  // useEffect(() => {
+  //   const checkStream = async () => {
+  //     const streamStatusResponse = await getStreamStatus(
+  //       livepeerApi,
+  //       testStreamId
+  //     );
+  //     console.log("streamStatusResponse", streamStatusResponse);
+  //     const sessionResponse = await getSessionData(livepeerApi, testStreamId);
+  //     console.log("sessionResponse", sessionResponse);
+  //   };
+  //   checkStream();
+  // }, [testStreamId]);
 
   return (
     <AppLayout sections={[{ name: "Creator" }]}>

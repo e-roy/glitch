@@ -7,12 +7,15 @@ import type { NextApiRequest, NextApiResponse } from "next";
  * video segments are currently being ingested by Livepeer.com.
  */
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === "GET") {
+  if (req.method === "PATCH") {
     const authorizationHeader = req.headers && req.headers["authorization"];
     const streamId = req.query.streamId;
     try {
-      const streamStatusResponse = await axios.get(
-        `https://livepeer.com/api/stream/${streamId}`,
+      const sessionResponse = await axios.patch(
+        `https://livepeer.com/api/stream/${streamId}/record`,
+        {
+          ...req.body,
+        },
         {
           headers: {
             "content-type": "application/json",
@@ -20,15 +23,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           },
         }
       );
-
-      if (streamStatusResponse && streamStatusResponse.data) {
+      if (sessionResponse) {
         res.statusCode = 200;
-        res.json({ ...streamStatusResponse.data });
+        res.json({ status: sessionResponse.status });
       } else {
         res.statusCode = 500;
         res.json({ error: "Something went wrong" });
       }
     } catch (error) {
+      console.log("error: ", error);
       res.statusCode = 500;
       res.json({ error });
     }

@@ -11,8 +11,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const authorizationHeader = req.headers && req.headers["authorization"];
     const streamId = req.query.streamId;
     try {
-      const streamStatusResponse = await axios.get(
-        `https://livepeer.com/api/stream/${streamId}`,
+      const sessionResponse = await axios.get(
+        `https://livepeer.com/api/stream/${streamId}/sessions?record=1`,
         {
           headers: {
             "content-type": "application/json",
@@ -21,9 +21,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
       );
 
-      if (streamStatusResponse && streamStatusResponse.data) {
+      if (sessionResponse && sessionResponse.data) {
         res.statusCode = 200;
-        res.json({ ...streamStatusResponse.data });
+        res.json({ ...sessionResponse.data });
       } else {
         res.statusCode = 500;
         res.json({ error: "Something went wrong" });
