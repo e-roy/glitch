@@ -1,13 +1,13 @@
 export const ChatMessageInput = () => {
   return (
-    <div className="flex rounded bg-transparent text-secondary">
+    <div className="flex rounded bg-transparent text-backgroundLight hover:text-blue-400">
       <input
         type="text"
         placeholder="message"
-        className="bg-backgroundDark/50 rounded border-none focus-none w-full p-2"
+        className="bg-backgroundDark/50 rounded text-white border-none focus-none w-full p-2"
       />
-      <button className="mx-2 p-2 w-12 rounded-full bg-backgroundDark/50 hover:bg-backgroundDark/90">
-        S
+      <button className="font-black mx-2 p-4 w-20 border border-secondary rounded-lg bg-secondary hover:bg-backgroundLight ">
+        Send
       </button>
     </div>
   );

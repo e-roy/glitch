@@ -41,7 +41,7 @@ export const AppHeader = ({ sections = defaultSections }: AppHeaderProps) => {
         </a>
       </Link>
       <div id="sections" className="md:block hidden">
-        <ul className="flex text-gray-100 space-x-8">
+        <ul className="flex text-gray-100 font-oxanium font-bold text-5xl space-x-8">
           {sections.map((section, index) => (
             <li key={index} className="hover:text-secondary hover:underline decoration-secondary underline-offset-4 hover:cursor-pointer">
               {section.name}
