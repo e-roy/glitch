@@ -7,7 +7,7 @@ import giveRec from "./giveRec.png";
 import ellipse from "./Ellipse.png";
 
 export const HowItWorks = () => (
-  <div className="py-32 px-32 mt-14 mr-16 mb-14 ml-16 flex flex-col space-y-7 rounded overflow-hidden">
+  <div className="py-32 px-32 mt-14 mr-16 mb-14 ml-16 flex flex-col space-y-7 rounded overflow-hidden" id="how-it-works">
 
     <div className="self-center ">
       <div className=" bg-[#D53D5C] w-20 h-20 -mb-16 -ml-5 rounded-full">

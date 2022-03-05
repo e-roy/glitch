@@ -6,22 +6,25 @@ import { Logo } from "components/elements";
 import Link from "next/link";
 
 type AppHeaderProps = {
-  sections?: { name: string }[];
+  sections?: { name: string, id?: string }[];
+  sectionsClassName?: string
 };
 
 const defaultSections = [
   {
     name: "Home",
+    id: "#hero"
   },
   {
     name: "How it works",
+    id: "#how-it-works"
   },
   {
     name: "Popular Stream",
   },
 ];
 
-export const AppHeader = ({ sections = defaultSections }: AppHeaderProps) => {
+export const AppHeader = ({ sections = defaultSections, sectionsClassName }: AppHeaderProps) => {
   const [{ data: accountData }] = useAccount();
   const { address: user } = useUser();
 
@@ -41,10 +44,10 @@ export const AppHeader = ({ sections = defaultSections }: AppHeaderProps) => {
         </a>
       </Link>
       <div id="sections" className="md:block hidden">
-        <ul className="flex text-gray-100 font-oxanium font-bold text-5xl space-x-8">
+        <ul className={`flex text-gray-100 space-x-8 ${sectionsClassName ?? ''}`}>
           {sections.map((section, index) => (
             <li key={index} className="hover:text-secondary hover:underline decoration-secondary underline-offset-4 hover:cursor-pointer">
-              {section.name}
+              <a href={section?.id}>{section.name}</a>
             </li>
           ))}
         </ul>

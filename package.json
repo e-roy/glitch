@@ -13,6 +13,7 @@
     "@openzeppelin/contracts": "^4.5.0",
     "axios": "^0.21.1",
     "ethers": "^5.5.4",
+    "gun": "^0.2020.1235",
     "hls.js": "^1.1.5",
     "iron-session": "^6.0.5",
     "mux.js": "^5.11.0",
