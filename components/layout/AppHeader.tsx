@@ -35,7 +35,7 @@ export const AppHeader = ({ sections = defaultSections }: AppHeaderProps) => {
 
   return (
     <header className="w-full px-10 py-4 flex justify-between items-center sticky top-0 left-0 z-10 font-work-sans">
-      <Link href={user ? "/dashboard" : "/"}>
+      <Link href={user ? "/main" : "/"}>
         <a>
           <Logo />
         </a>
@@ -43,7 +43,10 @@ export const AppHeader = ({ sections = defaultSections }: AppHeaderProps) => {
       <div id="sections" className="md:block hidden">
         <ul className="flex text-gray-100 font-oxanium font-bold text-5xl space-x-8">
           {sections.map((section, index) => (
-            <li key={index} className="hover:text-secondary hover:underline decoration-secondary underline-offset-4 hover:cursor-pointer">
+            <li
+              key={index}
+              className="hover:text-secondary hover:underline decoration-secondary underline-offset-4 hover:cursor-pointer"
+            >
               {section.name}
             </li>
           ))}
