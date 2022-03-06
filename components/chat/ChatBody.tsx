@@ -17,6 +17,21 @@ const messages = [
     name: "John Doe",
     message: "I am doing great, thank you!",
   },
+  {
+    cid: 4,
+    name: "John Doe",
+    message: "Hello, how are you?",
+  },
+  {
+    cid: 5,
+    name: "Jane Doe",
+    message: "Doing good, how about you?",
+  },
+  {
+    cid: 6,
+    name: "John Doe",
+    message: "I am doing great, thank you!",
+  },
 ];
 
 export const ChatBody = () => {
@@ -28,7 +43,7 @@ export const ChatBody = () => {
         Chat ({activeUsers.length})
       </div>
 
-      <div className="my-4 p-4 bg-backgroundLight">
+      <div className="my-4 p-4 bg-backgroundLight max-h-96 overflow-y-auto">
         {messages.map((message, index) => (
           <ChatMessage key={index} {...message} />
         ))}
