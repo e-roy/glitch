@@ -9,7 +9,7 @@ export const AppLayout = ({ children, sections }: WebsiteLayoutProps) => {
   return (
     <div className="bg-backgroundDark min-h-screen text-stone-100 pb-12">
       <AppHeader sections={sections} />
-      <main className="mt-16 h-full">{children}</main>
+      <main className="mt-8 h-full">{children}</main>
     </div>
   );
 };
