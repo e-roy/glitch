@@ -1,6 +1,15 @@
+import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
+import { ironOptions } from "lib/session";
 import { AppLayout } from "../../components/layout";
 import { StreamCard } from "../../components/cards";
+
+import { createAlchemyWeb3 } from "@alch/alchemy-web3";
+
+const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
+const alchemyETH = createAlchemyWeb3(
+  `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
+);
 
 const streams = [
   {
@@ -72,3 +81,45 @@ const VideoListPage: NextPage<VideoListPageProps> = ({}) => {
 };
 
 export default VideoListPage;
+
+export const getServerSideProps = withIronSessionSsr(async function ({
+  req,
+  res,
+  params,
+}) {
+  if (req.session.siwe === undefined) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  // set contract address
+  const contractAddress = params.id;
+  // get logged in user
+  const userAddress = req.session.siwe.address;
+  // get user's ethereum NFTs
+  const ethNfts = await alchemyETH.alchemy.getNfts({
+    owner: userAddress,
+  });
+  // filter matching NFTs tokens for Contract
+  const matchedNfts = ethNfts.ownedNfts.filter((nft: any) => {
+    return nft.contract.address === contractAddress;
+  });
+  // if user doesn't have an nft in this contract redirect the user
+  if (matchedNfts.length === 0) {
+    // console.log("no nft found");
+    return {
+      redirect: {
+        destination: "/noaccess",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { contractAddress },
+  };
+},
+ironOptions);
