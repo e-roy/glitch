@@ -41,9 +41,9 @@ const initialState: initialStateType = {
   streams: [],
 };
 
-const reducer = (state: typeof initialState, streams: Stream[]) => {
+const reducer = (state: typeof initialState, stream: Stream) => {
   return {
-    streams: streams,
+    streams: [...state.streams, stream],
   };
 };
 
@@ -57,16 +57,15 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
 
   const fetchStreams = () => {
     const streams = gun.get("contracts").get(hashedAddress).get("streams");
-    const tempStreams: Stream[] = [];
-    streams.map().on((data: Stream) => {
+    streams.once().map().once((data?: Stream | Object) => {
       if (
-        (data.active || data.record) &&
-        !tempStreams.find((s) => s.id === data.id)
+         data && "active" in data &&
+        (data?.active || data.record) &&
+        !state.streams.find((s) => s.id === data.id)
       ) {
-        tempStreams.push(data);
+        dispatch(data);
       }
     });
-    dispatch(tempStreams);
   };
 
   return (
@@ -84,7 +83,7 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           </button>
         </div>
         <div className="flex flex-wrap">
-          {state.streams.map((stream, index) => (
+          {state.streams.sort((a, b) => a.createdAt - b.createdAt).map((stream, index) => (
             <div key={index} className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4">
               <StreamCard stream={stream} contractAddress={contractAddress} />
             </div>

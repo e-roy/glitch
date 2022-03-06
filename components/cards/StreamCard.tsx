@@ -16,7 +16,7 @@ export type StreamCardProps = {
 };
 
 export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
-  const { id, name, playbackId } = stream;
+  const { id, name, playbackId, active } = stream;
 
   const getType = () => {
     if (stream.active) {
@@ -28,6 +28,11 @@ export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
 
   return (
     <div className="m-4 p-2 rounded bg-backgroundLight text-secondary">
+      {!!active && (
+        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+        </span>
+      )}
       <div className="text-center text-lg font-bold">{name}</div>
       <div className="flex my-12 text-backgroundLight justify-center">
         <div className="rounded-full bg-secondary py-2 w-7 flex justify-center mx-2">
@@ -45,7 +50,7 @@ export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
           href={`/viewer/${contractAddress}?type=${getType()}&playbackId=${playbackId}`}
         >
           <button className="font-bold w-1/2 py-1 mx-auto border uppercase border-secondary rounded bg-backgroundDark/30 hover:bg-secondary text-secondary hover:text-backgroundDark">
-            {stream.id}
+            Go to {getType() === "hls" ? "stream" : "recording"}
           </button>
         </Link>
       </div>
