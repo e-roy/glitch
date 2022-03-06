@@ -11,6 +11,7 @@ export type WebCamProps = {
   createNewStream: () => void;
   closeStream: () => void;
   startSession: () => void;
+  endSession: () => void;
 };
 
 export const WebCam = ({
@@ -19,6 +20,7 @@ export const WebCam = ({
   createNewStream,
   closeStream,
   startSession,
+  endSession
 }: WebCamProps) => {
   const videoEl = useRef<any>(null);
   const stream = useRef<any>(null);
@@ -55,6 +57,7 @@ export const WebCam = ({
     session.on("close", () => {
       console.log("Stream stopped.");
       setStreamIsActive(false);
+      endSession();
     });
 
     session.on("error", (err) => {
