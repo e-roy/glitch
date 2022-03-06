@@ -12,6 +12,7 @@ export type WebCamProps = {
   closeStream: () => void;
   startSession: () => void;
   endSession: () => void;
+  handleRecordState: (record: boolean) => void;
 };
 
 export const WebCam = ({
@@ -20,7 +21,8 @@ export const WebCam = ({
   createNewStream,
   closeStream,
   startSession,
-  endSession
+  endSession,
+  handleRecordState
 }: WebCamProps) => {
   const videoEl = useRef<any>(null);
   const stream = useRef<any>(null);
@@ -77,6 +79,7 @@ export const WebCam = ({
     }
     closeStream();
     setStreamIsActive(false);
+    endSession();
   };
 
   const handleStartCamera = async () => {
@@ -129,12 +132,13 @@ export const WebCam = ({
       alert("Invalid streamKey.");
       return;
     }
-
     if (recordStatus) {
       setRecordStatus(false);
+      handleRecordState(false);
       await activateRecord(livepeerApi, streamId, false);
     } else {
       setRecordStatus(true);
+      handleRecordState(true);
       await activateRecord(livepeerApi, streamId, true);
     }
   };

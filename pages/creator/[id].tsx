@@ -129,21 +129,12 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
         );
         if (streamStatusResponse.data) {
           const { isActive, record } = streamStatusResponse.data;
-          dispatch({
-            type: "SET_RECORD",
-            payload: {
-              record,
-            },
-          });
           if (state.appState !== 4 && isActive) {
             dispatch({
               type: "VIDEO_STARTED",
             });
           }
         }
-        gun.get('contracts').get(hashedAddress).get(state.streamId).on(data => {
-          console.log(data)
-        })
       }, 5000);
     }
 
@@ -159,6 +150,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
   };
 
   const handleStartSession = async () => {  
+    
     const {
       streamId: id,
       record,
@@ -166,7 +158,10 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
       name,
       playbackId,
     } = state
-    gun.get('contracts').get(hashedAddress).get(state.streamId).put({
+
+    console.log(state)
+    
+    const stream = gun.get(state.streamId).put({
       id,
       name,
       playbackId,
@@ -174,12 +169,23 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
       active: true,
       createdAt
     })
+
+    gun.get('contracts').get(hashedAddress).get('streams').set(stream)
   };
 
   const handleEndSession = () => {
-    gun.get('contracts').get(hashedAddress).get(state.streamId).put({
+    gun.get(state.streamId).put({
       active: false
     })
+  }
+
+  const handleRecordState = (record: boolean) => {
+    dispatch({
+      type: "SET_RECORD",
+      payload: {
+        record,
+      },
+    });
   }
 
   return (
@@ -191,7 +197,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
           </div>
           <WebCam
             streamKey={state.streamKey}
-            streamId={state.streamId}
+            streamId={state.streamId} 
             createNewStream={() => dispatch({ type: "CREATE_CLICKED" })}
             closeStream={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
             startSession={() => {
@@ -200,6 +206,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
             endSession={() => {
               handleEndSession();
             }}
+            handleRecordState={handleRecordState}
           />
         </div>
         <div className="md:w-2/5 md:pl-4 lg:pl-16 xl:mx-4 2xl:mx-8">
