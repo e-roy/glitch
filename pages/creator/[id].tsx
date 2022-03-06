@@ -104,7 +104,7 @@ const CreatorPage: NextPage = () => {
           state.streamId
         );
         if (streamStatusResponse.data) {
-          // console.log("streamStatusResponse", streamStatusResponse.data);
+          console.log("streamStatusResponse", streamStatusResponse.data);
 
           const { isActive } = streamStatusResponse.data;
           if (state.appState !== 4 && isActive)
@@ -126,6 +126,10 @@ const CreatorPage: NextPage = () => {
     setRefreshStream(!refreshStream);
   };
 
+  const handleStartSession = () => {
+    console.log("session started");
+  };
+
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
       <div className="md:flex m-4 mb-12">
@@ -138,6 +142,9 @@ const CreatorPage: NextPage = () => {
             streamId={state.streamId}
             createNewStream={() => dispatch({ type: "CREATE_CLICKED" })}
             closeStream={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
+            startSession={() => {
+              handleStartSession();
+            }}
           />
         </div>
         <div className="md:w-2/5 md:pl-4 lg:pl-16 xl:mx-4 2xl:mx-8">

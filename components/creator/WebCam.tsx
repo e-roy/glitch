@@ -10,6 +10,7 @@ export type WebCamProps = {
   streamId: string;
   createNewStream: () => void;
   closeStream: () => void;
+  startSession: () => void;
 };
 
 export const WebCam = ({
@@ -17,6 +18,7 @@ export const WebCam = ({
   streamId,
   createNewStream,
   closeStream,
+  startSession,
 }: WebCamProps) => {
   const videoEl = useRef<any>(null);
   const stream = useRef<any>(null);
@@ -46,6 +48,7 @@ export const WebCam = ({
     session.on("open", () => {
       console.log("Stream started.");
       setStreamIsActive(true);
+      startSession();
       // alert("Stream started; visit Livepeer Dashboard.");
     });
 
