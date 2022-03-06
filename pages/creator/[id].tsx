@@ -8,25 +8,34 @@ import { ChatBody } from "components/chat";
 import { createStream, getStreamStatus } from "utils/apiFactory";
 import { APP_STATES } from "utils/types";
 import { VideoPlayer } from "components/video";
+import Gun from "gun";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
+import { useHash } from "hooks";
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
   `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
 );
 
+const gun = Gun({
+  peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+});
+
 const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
 const INITIAL_STATE = {
   appState: APP_STATES.CREATE_BUTTON,
   apiKey: livepeerApi,
+  name: "",
   streamId: null,
   playbackId: null,
   streamKey: null,
   streamIsActive: false,
   sourceSegments: 0,
   error: null,
+  record: false,
+  createdAt: null,
 };
 
 const reducer = (state: any, action: any) => {
@@ -43,6 +52,13 @@ const reducer = (state: any, action: any) => {
         streamId: action.payload.streamId,
         playbackId: action.payload.playbackId,
         streamKey: action.payload.streamKey,
+        name: action.payload.name,
+        createdAt: action.payload.createdAt,
+      };
+    case "SET_RECORD":
+      return {
+        ...state,
+        record: action.payload.record,
       };
     case "VIDEO_STARTED":
       return {
@@ -65,9 +81,13 @@ const reducer = (state: any, action: any) => {
   }
 };
 
-const CreatorPage: NextPage = () => {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+type CreatorPageProps = {
+  contractAddress: string;
+};
 
+const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const { hashedAddress } = useHash({ address: contractAddress });
   useEffect(() => {
     if (state.appState === APP_STATES.CREATING_STREAM) {
       // console.log("creating stream");
@@ -79,6 +99,8 @@ const CreatorPage: NextPage = () => {
               id: streamId,
               playbackId,
               streamKey,
+              name,
+              createdAt,
             } = streamCreateResponse.data;
             dispatch({
               type: "STREAM_CREATED",
@@ -86,6 +108,8 @@ const CreatorPage: NextPage = () => {
                 streamId,
                 playbackId,
                 streamKey,
+                name,
+                createdAt,
               },
             });
           }
@@ -104,13 +128,12 @@ const CreatorPage: NextPage = () => {
           state.streamId
         );
         if (streamStatusResponse.data) {
-          console.log("streamStatusResponse", streamStatusResponse.data);
-
-          const { isActive } = streamStatusResponse.data;
-          if (state.appState !== 4 && isActive)
+          const { isActive, record } = streamStatusResponse.data;
+          if (state.appState !== 4 && isActive) {
             dispatch({
               type: "VIDEO_STARTED",
             });
+          }
         }
       }, 5000);
     }
@@ -126,9 +149,44 @@ const CreatorPage: NextPage = () => {
     setRefreshStream(!refreshStream);
   };
 
-  const handleStartSession = () => {
-    console.log("session started");
+  const handleStartSession = async () => {  
+    
+    const {
+      streamId: id,
+      record,
+      createdAt,
+      name,
+      playbackId,
+    } = state
+
+    console.log(state)
+    
+    const stream = gun.get(state.streamId).put({
+      id,
+      name,
+      playbackId,
+      record,
+      active: true,
+      createdAt
+    })
+
+    gun.get('contracts').get(hashedAddress).get('streams').set(stream)
   };
+
+  const handleEndSession = () => {
+    gun.get(state.streamId).put({
+      active: false
+    })
+  }
+
+  const handleRecordState = (record: boolean) => {
+    dispatch({
+      type: "SET_RECORD",
+      payload: {
+        record,
+      },
+    });
+  }
 
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
@@ -139,12 +197,16 @@ const CreatorPage: NextPage = () => {
           </div>
           <WebCam
             streamKey={state.streamKey}
-            streamId={state.streamId}
+            streamId={state.streamId} 
             createNewStream={() => dispatch({ type: "CREATE_CLICKED" })}
             closeStream={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
             startSession={() => {
               handleStartSession();
             }}
+            endSession={() => {
+              handleEndSession();
+            }}
+            handleRecordState={handleRecordState}
           />
         </div>
         <div className="md:w-2/5 md:pl-4 lg:pl-16 xl:mx-4 2xl:mx-8">

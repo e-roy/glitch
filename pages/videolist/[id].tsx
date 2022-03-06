@@ -5,63 +5,68 @@ import { AppLayout } from "../../components/layout";
 import { StreamCard } from "../../components/cards";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
+import { useEffect, useReducer } from "react";
+import { useHash } from "hooks";
+import Gun from "gun";
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
   `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
 );
 
-const streams = [
-  {
-    id: "1",
-    title: "Stream 1",
-    description: "Stream 1 description",
-    thumbnail: "https://picsum.photos/200/300",
-    tokenId: "1",
-    playbackId: "1",
-    type: "recordings",
-  },
-  {
-    id: "2",
-    title: "Stream 2",
-    description: "Stream 2 description",
-    thumbnail: "https://picsum.photos/200/300",
-    tokenId: "2",
-    playbackId: "2",
-    type: "recordings",
-  },
-  {
-    id: "3",
-    title: "Stream 3",
-    description: "Stream 3 description",
-    thumbnail: "https://picsum.photos/200/300",
-    tokenId: "3",
-    playbackId: "3",
-    type: "recordings",
-  },
-  {
-    id: "4",
-    title: "Stream 4",
-    description: "Stream 4 description",
-    thumbnail: "https://picsum.photos/200/300",
-    tokenId: "4",
-    playbackId: "4",
-    type: "hls",
-  },
-  {
-    id: "5",
-    title: "Stream 5",
-    description: "Stream 5 description",
-    thumbnail: "https://picsum.photos/200/300",
-    tokenId: "5",
-    playbackId: "5",
-    type: "hls",
-  },
-];
+export type VideoListPageProps = {
+  contractAddress: string;
+};
 
-export type VideoListPageProps = {};
+const gun = Gun({
+  peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+});
 
-const VideoListPage: NextPage<VideoListPageProps> = ({}) => {
+type Stream = {
+  id: string;
+  name: string;
+  playbackId: string;
+  record: boolean | null;
+  active: boolean | null;
+  createdAt: number;
+};
+
+type initialStateType = {
+  streams: Stream[];
+};
+
+const initialState: initialStateType = {
+  streams: [],
+};
+
+const reducer = (state: typeof initialState, streams: Stream[]) => {
+  return {
+    streams: streams,
+  };
+};
+
+const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { hashedAddress } = useHash({ address: contractAddress });
+
+  useEffect(() => {
+    console.log('runs on first load')
+    const sub = () => {
+      const streams = gun.get("contracts").get(hashedAddress).get("streams");
+      const tempStreams: Stream[] = [] 
+      streams.map().on((data: Stream) => {
+        if (
+          (data.active || data.record) &&
+          !tempStreams.find((s) => s.id === data.id)
+        ) {
+          tempStreams.push(data)
+        }
+      }); 
+      dispatch(tempStreams)
+    }
+    sub()
+  }, [hashedAddress]); 
+
   return (
     <AppLayout sections={[{ name: "User Feed" }]}>
       <div className="mx-24">
@@ -69,7 +74,7 @@ const VideoListPage: NextPage<VideoListPageProps> = ({}) => {
           Streams to Watch
         </div>
         <div className="flex flex-wrap">
-          {streams.map((stream, index) => (
+          {state.streams.map((stream, index) => (
             <div key={index} className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4">
               <StreamCard stream={stream} />
             </div>
