@@ -149,35 +149,28 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
     setRefreshStream(!refreshStream);
   };
 
-  const handleStartSession = async () => {  
-    
-    const {
-      streamId: id,
-      record,
-      createdAt,
-      name,
-      playbackId,
-    } = state
+  const handleStartSession = async () => {
+    const { streamId: id, record, createdAt, name, playbackId } = state;
 
-    console.log(state)
-    
+    console.log("state", state);
+
     const stream = gun.get(state.streamId).put({
       id,
       name,
       playbackId,
       record,
       active: true,
-      createdAt
-    })
+      createdAt,
+    });
 
-    gun.get('contracts').get(hashedAddress).get('streams').set(stream)
+    gun.get("contracts").get(hashedAddress).get("streams").set(stream);
   };
 
   const handleEndSession = () => {
     gun.get(state.streamId).put({
-      active: false
-    })
-  }
+      active: false,
+    });
+  };
 
   const handleRecordState = (record: boolean) => {
     dispatch({
@@ -186,7 +179,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
         record,
       },
     });
-  }
+  };
 
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
@@ -197,7 +190,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
           </div>
           <WebCam
             streamKey={state.streamKey}
-            streamId={state.streamId} 
+            streamId={state.streamId}
             createNewStream={() => dispatch({ type: "CREATE_CLICKED" })}
             closeStream={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
             startSession={() => {

@@ -24,7 +24,8 @@ const gun = Gun({
 
 type Stream = {
   id: string;
-  name: string;
+  title?: string;
+  description?: string;
   playbackId: string;
   record: boolean | null;
   active: boolean | null;
@@ -50,22 +51,26 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const { hashedAddress } = useHash({ address: contractAddress });
 
   useEffect(() => {
-    console.log('runs on first load')
+    console.log(state);
+  }, [state]);
+
+  useEffect(() => {
+    console.log("runs on first load");
     const sub = () => {
       const streams = gun.get("contracts").get(hashedAddress).get("streams");
-      const tempStreams: Stream[] = [] 
+      const tempStreams: Stream[] = [];
       streams.map().on((data: Stream) => {
         if (
           (data.active || data.record) &&
           !tempStreams.find((s) => s.id === data.id)
         ) {
-          tempStreams.push(data)
+          tempStreams.push(data);
         }
-      }); 
-      dispatch(tempStreams)
-    }
-    sub()
-  }, [hashedAddress]); 
+      });
+      dispatch(tempStreams);
+    };
+    sub();
+  }, [hashedAddress]);
 
   return (
     <AppLayout sections={[{ name: "User Feed" }]}>
@@ -76,7 +81,7 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
         <div className="flex flex-wrap">
           {state.streams.map((stream, index) => (
             <div key={index} className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4">
-              <StreamCard stream={stream} />
+              <StreamCard stream={stream} contractAddress={contractAddress} />
             </div>
           ))}
         </div>

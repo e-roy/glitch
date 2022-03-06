@@ -1,29 +1,30 @@
 import Link from "next/link";
 import { PlayIcon, PauseIcon, StopIcon } from "components/icons";
 
-type Stream = { 
-  id: string,
-  name: string,
-  playbackId: string,
-  record: boolean | null,
-  active: boolean | null,
-  createdAt: number
-}
-
-export type StreamCardProps = {
-  stream: Stream
+type Stream = {
+  id: string;
+  name: string;
+  playbackId: string;
+  record: boolean | null;
+  active: boolean | null;
+  createdAt: number;
 };
 
-export const StreamCard = ({ stream }: StreamCardProps) => {
+export type StreamCardProps = {
+  stream: Stream;
+  contractAddress: string;
+};
+
+export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
   const { id, name, playbackId } = stream;
 
   const getType = () => {
     if (stream.active) {
-      return "hls"
-    } else if(stream.record && !stream.active) {
-      return "recordings"
+      return "hls";
+    } else if (stream.record && !stream.active) {
+      return "recordings";
     }
-  }
+  };
 
   return (
     <div className="m-4 p-2 rounded bg-backgroundLight text-secondary">
@@ -40,7 +41,9 @@ export const StreamCard = ({ stream }: StreamCardProps) => {
         </div>
       </div>
       <div className="flex content-center">
-        <Link href={`/viewer/${playbackId}?type=${getType()}`}>
+        <Link
+          href={`/viewer/${contractAddress}?type=${getType()}&playbackId=${playbackId}`}
+        >
           <button className="font-bold w-1/2 py-1 mx-auto border uppercase border-secondary rounded bg-backgroundDark/30 hover:bg-secondary text-secondary hover:text-backgroundDark">
             {stream.id}
           </button>
