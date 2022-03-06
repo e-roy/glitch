@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { VideoCameraIcon, DesktopComputerIcon } from "@heroicons/react/outline";
 import { PlayIcon, RecordIcon, StopIcon } from "components/icons";
 
@@ -7,26 +7,37 @@ export type StreamControlsProps = {
   handleStopStream: () => void;
   handleRecord: () => void;
   handleStartSession: () => void;
+  handleContent: (content: string) => void;
+  streamIsActive: boolean;
+  setStreamIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
-export default function classNames(...classes: unknown[]) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export const StreamControls = ({
   createNewStream,
   handleStopStream,
   handleRecord,
   handleStartSession,
+  handleContent,
+  streamIsActive,
+  setStreamIsActive,
 }: StreamControlsProps) => {
   const [displayActive, setDisplayActive] = useState("");
-  const [streamIsActive, setStreamIsActive] = useState(false);
   const [sessionIsActive, setSessionIsActive] = useState(false);
   const [recordIsActive, setRecordIsActive] = useState(false);
+
+  const classNames = (...classes: unknown[]) => {
+    return classes.filter(Boolean).join(" ");
+  };
+
+  useEffect(() => {
+    console.log(displayActive);
+    handleContent(displayActive);
+  }, [displayActive]);
 
   return (
     <div className="flex justify-between border-2 border-backgroundLight bg-backgroundLight/50 w-full p-2 mt-8 rounded">
       <div>
+        {/* {displayActive} */}
         <button
           className={classNames(
             displayActive === "display"
@@ -59,6 +70,7 @@ export const StreamControls = ({
       <div className="flex text-backgroundLight">
         {!sessionIsActive ? (
           <button
+            disabled={!streamIsActive}
             className="rounded-full border-2 border-secondary bg-secondary hover:bg-backgroundLight hover:text-secondary py-2 pl-1 w-10 flex justify-center mx-2"
             onClick={() => {
               setSessionIsActive(true);
@@ -79,6 +91,7 @@ export const StreamControls = ({
           <>
             {!sessionIsActive ? (
               <button
+                disabled={!streamIsActive}
                 className="rounded-full  border-2 border-red-600/70 hover:border-red-600 text-red-600/70 hover:bg-backgroundLight hover:text-red-600 py-2 w-8  flex justify-center m-1"
                 onClick={() => {
                   setRecordIsActive(true);
