@@ -42,8 +42,8 @@ export const StreamControls = ({
           className={classNames(
             displayActive === "display"
               ? "text-green-600 border-green-600 hover:text-green-600"
-              : "",
-            "font-bold p-2 mx-2 border border-backgroundDark rounded hover:bg-backgroundDark/70 bg-backgroundDark/50 text-stone-300 hover:text-stone-100"
+              : "text-stone-300 hover:text-stone-100 border-backgroundDark",
+            "font-bold p-2 mx-2 border rounded hover:bg-backgroundDark/70 bg-backgroundDark/50 "
           )}
           onClick={() => {
             if (displayActive !== "display") setDisplayActive("display");
@@ -56,8 +56,8 @@ export const StreamControls = ({
           className={classNames(
             displayActive === "camera"
               ? "text-green-600 border-green-600 hover:text-green-600"
-              : "",
-            "font-bold p-2 mx-2 border border-backgroundDark rounded hover:bg-backgroundDark/70 bg-backgroundDark/50 text-stone-300 hover:text-stone-100"
+              : "text-stone-300 hover:text-stone-100 border-backgroundDark",
+            "font-bold p-2 mx-2 border rounded hover:bg-backgroundDark/70 bg-backgroundDark/50 "
           )}
           onClick={() => {
             if (displayActive !== "camera") setDisplayActive("camera");
@@ -67,94 +67,82 @@ export const StreamControls = ({
           <VideoCameraIcon className={"h-5 w-5"} aria-hidden={"true"} />
         </button>
       </div>
-      <div className="flex text-backgroundLight">
-        {!sessionIsActive ? (
-          <button
-            disabled={!streamIsActive}
-            className="rounded-full border-2 border-secondary bg-secondary hover:bg-backgroundLight hover:text-secondary py-2 pl-1 w-10 flex justify-center mx-2"
-            onClick={() => {
-              setSessionIsActive(true);
-              handleStartSession();
-            }}
-          >
-            <PlayIcon size={18} />
-          </button>
-        ) : (
-          <button
-            className="rounded-full border-2 border-secondary bg-secondary hover:bg-backgroundLight hover:text-secondary py-2 w-10 flex justify-center mx-2"
-            onClick={() => setSessionIsActive(false)}
-          >
-            <StopIcon size={18} />
-          </button>
-        )}
-        {!recordIsActive ? (
-          <>
-            {!sessionIsActive ? (
-              <button
-                disabled={!streamIsActive}
-                className="rounded-full  border-2 border-red-600/70 hover:border-red-600 text-red-600/70 hover:bg-backgroundLight hover:text-red-600 py-2 w-8  flex justify-center m-1"
-                onClick={() => {
-                  setRecordIsActive(true);
-                  handleRecord();
-                }}
-              >
-                <RecordIcon />
-              </button>
-            ) : (
-              <button
-                disabled
-                className="rounded-full border-2 border-backgroundLight  hover:text-backgroundLight py-2 w-8 flex justify-center m-1"
-              >
-                <RecordIcon />
-              </button>
-            )}
-          </>
-        ) : (
-          <>
-            {!sessionIsActive ? (
-              <button
-                className="rounded-full  border-2 border-red-600 bg-red-600/40 text-red-600 py-2 w-8  flex justify-center m-1"
-                onClick={() => {
-                  setRecordIsActive(false);
-                  handleRecord();
-                }}
-              >
-                <RecordIcon />
-              </button>
-            ) : (
-              <button
-                disabled
-                className="rounded-full border-2 border-red-600 bg-red-600/40 text-red-600 py-2 w-8 flex justify-center m-1"
-              >
-                <RecordIcon />
-              </button>
-            )}
-          </>
-        )}
-      </div>
-      <div>
-        {!streamIsActive ? (
-          <button
-            onClick={() => {
-              createNewStream();
-              setStreamIsActive(true);
-            }}
-            className="font-bold w-36 py-2 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
-          >
-            Create New Stream
-          </button>
-        ) : (
-          <button
-            onClick={() => {
-              handleStopStream();
-              setStreamIsActive(false);
-            }}
-            className="font-bold w-36 py-2 mx-auto border rounded text-sm border-red-600 bg-red-500 hover:bg-red-600  text-stone-200 hover:text-stone-100"
-          >
-            End Stream
-          </button>
-        )}
-      </div>
+      {streamIsActive ? (
+        <>
+          {displayActive !== "" && (
+            <div>
+              {!sessionIsActive ? (
+                <div className="flex">
+                  <button
+                    disabled={!streamIsActive}
+                    className="rounded-full border-2 border-secondary bg-secondary hover:bg-backgroundLight text-backgroundLight hover:text-secondary py-2 pl-1 w-10 flex justify-center mx-2"
+                    onClick={() => {
+                      setSessionIsActive(true);
+                      handleStartSession();
+                    }}
+                  >
+                    <PlayIcon size={18} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setRecordIsActive(!recordIsActive);
+                      handleRecord();
+                    }}
+                    className={classNames(
+                      recordIsActive
+                        ? "border-red-600  text-red-600 animate-pulse"
+                        : "border-red-600/70 hover:border-red-600 text-red-600/70 hover:text-red-600",
+                      "rounded-full border-2 py-2 w-8 flex justify-center m-1"
+                    )}
+                  >
+                    <RecordIcon />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex">
+                  <button
+                    className="rounded-full border-2 border-secondary bg-secondary hover:bg-backgroundLight text-backgroundLight hover:text-secondary py-2 w-10 flex justify-center mx-2"
+                    onClick={() => {
+                      setSessionIsActive(false);
+                      handleStopStream();
+                      setDisplayActive("");
+                    }}
+                  >
+                    <StopIcon size={18} />
+                  </button>
+                  <button
+                    disabled
+                    className={classNames(
+                      recordIsActive
+                        ? "border-red-600  text-red-600 animate-pulse"
+                        : "border-backgroundLight text-backgroundLight",
+                      "rounded-full border-2 py-2 w-8 flex justify-center m-1"
+                    )}
+                  >
+                    <RecordIcon />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          <div></div>
+        </>
+      ) : (
+        <>
+          <div></div>
+          <div>
+            <button
+              onClick={() => {
+                createNewStream();
+                setStreamIsActive(true);
+              }}
+              className="font-bold w-36 py-2 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
+            >
+              Create New Stream
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
