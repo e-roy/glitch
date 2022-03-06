@@ -3,7 +3,7 @@ import { PlayIcon, PauseIcon, StopIcon } from "components/icons";
 
 type Stream = {
   id: string;
-  name: string;
+  name?: string;
   playbackId: string;
   record: boolean | null;
   active: boolean | null;

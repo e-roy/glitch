@@ -5,9 +5,10 @@ import { AppLayout } from "../../components/layout";
 import { StreamCard } from "../../components/cards";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useHash } from "hooks";
 import Gun from "gun";
+import { TRUE } from "sass";
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
@@ -24,7 +25,7 @@ const gun = Gun({
 
 type Stream = {
   id: string;
-  title?: string;
+  name?: string;
   description?: string;
   playbackId: string;
   record: boolean | null;
@@ -51,32 +52,36 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const { hashedAddress } = useHash({ address: contractAddress });
 
   useEffect(() => {
-    console.log(state);
-  }, [state]);
-
-  useEffect(() => {
-    console.log("runs on first load");
-    const sub = () => {
-      const streams = gun.get("contracts").get(hashedAddress).get("streams");
-      const tempStreams: Stream[] = [];
-      streams.map().on((data: Stream) => {
-        if (
-          (data.active || data.record) &&
-          !tempStreams.find((s) => s.id === data.id)
-        ) {
-          tempStreams.push(data);
-        }
-      });
-      dispatch(tempStreams);
-    };
-    sub();
+    fetchStreams();
   }, [hashedAddress]);
+
+  const fetchStreams = () => {
+    const streams = gun.get("contracts").get(hashedAddress).get("streams");
+    const tempStreams: Stream[] = [];
+    streams.map().on((data: Stream) => {
+      if (
+        (data.active || data.record) &&
+        !tempStreams.find((s) => s.id === data.id)
+      ) {
+        tempStreams.push(data);
+      }
+    });
+    dispatch(tempStreams);
+  };
 
   return (
     <AppLayout sections={[{ name: "User Feed" }]}>
       <div className="mx-24">
-        <div className="m-4 text-secondary text-2xl font-bold">
-          Streams to Watch
+        <div className="flex justify-between">
+          <div className="m-4 text-secondary text-2xl font-bold">
+            Streams to Watch
+          </div>
+          <button
+            className="self-center border border-secondary p-2 h-10 rounded font-semibold text-secondary hover:bg-secondary hover:text-backgroundDark"
+            onClick={() => fetchStreams()}
+          >
+            refresh
+          </button>
         </div>
         <div className="flex flex-wrap">
           {state.streams.map((stream, index) => (
