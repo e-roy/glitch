@@ -1,8 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Client } from "@livepeer/webrtmp-sdk";
-import { VideoCameraIcon, DesktopComputerIcon } from "@heroicons/react/outline";
 import { activateRecord } from "utils/apiFactory";
-import { PlayIcon, PauseIcon, StopIcon } from "components/icons";
+import { StreamControls } from "./";
 
 const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
@@ -21,19 +20,17 @@ export const WebCam = ({
 }: WebCamProps) => {
   const videoEl = useRef<any>(null);
   const stream = useRef<any>(null);
-
-  const [streamCreated, setStreamCreated] = useState(false);
-  const [cameraOn, setCameraOn] = useState(false);
   const [streamIsActive, setStreamIsActive] = useState(false);
   const [recordStatus, setRecordStatus] = useState(false);
+  const [displayActive, setDisplayActive] = useState("");
 
-  // useEffect(() => {
-  //   console.log("stream", stream);
-  //   let testBlankStream = new MediaStream();
-  //   console.log("testBlankStream", testBlankStream);
-  // }, [stream]);
+  useEffect(() => {
+    if (displayActive === "camera") handleStartCamera();
+    if (displayActive === "display") handleStartDisplay();
+  }, [displayActive]);
 
-  const handleStartStream = async () => {
+  const handleStartSession = async () => {
+    // console.log("handleStartSession");
     if (!stream.current) {
       alert("Video stream was not started.");
     }
@@ -63,7 +60,8 @@ export const WebCam = ({
     });
   };
 
-  const handleStop = () => {
+  const handleStopStream = () => {
+    // console.log("handleStopStream");
     // turn off camera and audio
     if (window.stream) {
       window.stream.getTracks().forEach(function (track) {
@@ -72,7 +70,6 @@ export const WebCam = ({
       });
     }
     closeStream();
-    // setStreamCreated(false);
     setStreamIsActive(false);
   };
 
@@ -90,7 +87,7 @@ export const WebCam = ({
     }
   };
 
-  const handleDevice = async () => {
+  const handleStartDisplay = async () => {
     // const devices = await navigator.mediaDevices.enumerateDevices();
     // console.log("devices", devices);
     var displayMediaStreamConstraints = {
@@ -120,9 +117,7 @@ export const WebCam = ({
   };
 
   const handleRecord = async () => {
-    if (!stream.current) {
-      alert("Video stream was not started.");
-    }
+    console.log("handleRecord");
 
     if (!streamId) {
       alert("Invalid streamKey.");
@@ -140,87 +135,19 @@ export const WebCam = ({
 
   return (
     <div className="">
-      <div className=" rounded content-center justify-center">
+      <div className=" rounded content-center justify-center min-h-96">
         <video className="mx-auto h-100" ref={videoEl} />
       </div>
-      <div className="flex justify-between bg-backgroundLight w-full p-2 mt-8 rounded">
-        <div>
-          {/* <button
-            className="font-bold px-10 py-2 mx-auto border hover:text-secondary border-secondary rounded hover:bg-backgroundLight bg-secondary text-backgroundDark"
-            onClick={handleRecord}
-          >
-            rec
-          </button> */}
-        </div>
-
-        <div>
-          <button
-            className="font-bold p-3 mx-2 border border-backgroundDark rounded hover:bg-backgroundDark/70 bg-backgroundDark/50 text-stone-300 hover:text-stone-100"
-            onClick={handleDevice}
-          >
-            <DesktopComputerIcon className={"h-5 w-5"} aria-hidden={"true"} />
-          </button>
-
-          <button
-            className="font-bold p-3 mx-2 border border-backgroundDark rounded hover:bg-backgroundDark/70 bg-backgroundDark/50 text-stone-300 hover:text-stone-100"
-            onClick={() => {
-              setCameraOn(!cameraOn);
-              if (cameraOn) {
-                handleStop();
-              } else {
-                handleStartCamera();
-              }
-            }}
-          >
-            {cameraOn ? (
-              <VideoCameraIcon
-                className={"h-5 w-5 text-red-600"}
-                aria-hidden={"true"}
-              />
-            ) : (
-              <VideoCameraIcon
-                className={"h-5 w-5 text-green-800"}
-                aria-hidden={"true"}
-              />
-            )}
-          </button>
-        </div>
-        <div>
-          {!streamCreated ? (
-            <button
-              className="font-bold px-4 py-3 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
-              onClick={() => {
-                createNewStream();
-                setStreamCreated(true);
-              }}
-            >
-              Create Stream
-            </button>
-          ) : (
-            <>
-              {!streamIsActive ? (
-                <button
-                  // disabled={!cameraOn}
-                  onClick={() => {
-                    handleStartStream();
-                  }}
-                  className="font-bold px-4 py-3 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
-                >
-                  Start Stream
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    handleStop();
-                  }}
-                  className="font-bold px-4 py-3 mx-auto border rounded text-sm border-red-600 bg-red-500 hover:bg-red-600  text-stone-200 hover:text-stone-100"
-                >
-                  Stop Stream
-                </button>
-              )}
-            </>
-          )}
-        </div>
+      <div>
+        <StreamControls
+          createNewStream={createNewStream}
+          handleStopStream={handleStopStream}
+          handleRecord={handleRecord}
+          handleStartSession={handleStartSession}
+          handleContent={setDisplayActive}
+          streamIsActive={streamIsActive}
+          setStreamIsActive={setStreamIsActive}
+        />
       </div>
     </div>
   );

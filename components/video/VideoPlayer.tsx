@@ -6,37 +6,50 @@ import "plyr-react/dist/plyr.css";
 export type VideoPlayerProps = {
   playbackId: string | null;
   streamIsActive?: boolean;
+  refreshStream?: boolean;
 };
 
 export const VideoPlayer = ({
   playbackId,
   streamIsActive,
+  refreshStream,
 }: VideoPlayerProps) => {
   const ref = useRef<APITypes>(null);
   useEffect(() => {
-    if (playbackId && streamIsActive) {
-      console.log("playbackId", playbackId);
-      console.log("streamIsActive", streamIsActive);
+    if (playbackId) {
       const loadVideo = async () => {
         const video = document.getElementById("plyr") as HTMLVideoElement;
         var hls = new Hls();
-        hls.loadSource(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
+        hls.loadSource(`https://cdn.livepeer.com/${playbackId}/index.m3u8`);
         hls.attachMedia(video);
         // @ts-ignore
         ref.current!.plyr.media = video;
 
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-          (ref.current!.plyr as PlyrInstance).play();
+          const playPromise = (ref.current!.plyr as PlyrInstance).play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then((_) => {
+                // Automatic playback started!
+                // Show playing UI.
+                console.log("Automatic playback started!");
+              })
+              .catch((error) => {
+                // Auto-play was prevented
+                // Show paused UI.
+                console.log("ERROR:", error);
+              });
+          }
         });
       };
       loadVideo();
     }
-  }, [playbackId, streamIsActive]);
+  }, [playbackId, refreshStream]);
 
   return (
     <Plyr
       id="plyr"
-      options={{ volume: 0.1 }}
+      options={{ volume: 0.1, autoplay: true }}
       source={{} as PlyrProps["source"]}
       ref={ref}
     />

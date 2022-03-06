@@ -1,13 +1,13 @@
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import { useState, useEffect, useReducer } from "react";
-import { VideoPreview, WebCam } from "../../components/creator";
-import { AppLayout } from "../../components/layout";
-import { ironOptions } from "../../lib/session";
-// import { WebCam } from "../../components/video";
-import { ChatBody } from "../../components/chat";
-import { createStream, getStreamStatus } from "../../utils/apiFactory";
-import { APP_STATES } from "../../utils/types";
+import { ironOptions } from "lib/session";
+import { AppLayout } from "components/layout";
+import { WebCam } from "components/creator";
+import { ChatBody } from "components/chat";
+import { createStream, getStreamStatus } from "utils/apiFactory";
+import { APP_STATES } from "utils/types";
+import { VideoPlayer } from "components/video";
 
 const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
@@ -18,6 +18,7 @@ const INITIAL_STATE = {
   playbackId: null,
   streamKey: null,
   streamIsActive: false,
+  sourceSegments: 0,
   error: null,
 };
 
@@ -59,10 +60,10 @@ const reducer = (state: any, action: any) => {
 
 const CreatorPage: NextPage = () => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const [streamKey, setStreamKey] = useState<string>("");
 
   useEffect(() => {
     if (state.appState === APP_STATES.CREATING_STREAM) {
+      // console.log("creating stream");
       (async function () {
         try {
           const streamCreateResponse = await createStream(state.apiKey);
@@ -89,17 +90,20 @@ const CreatorPage: NextPage = () => {
 
     let interval: any;
     if (state.streamId) {
+      // console.log("state streamId", state.streamId);
       interval = setInterval(async () => {
         const streamStatusResponse = await getStreamStatus(
           state.apiKey,
           state.streamId
         );
         if (streamStatusResponse.data) {
+          // console.log("streamStatusResponse", streamStatusResponse.data);
+
           const { isActive } = streamStatusResponse.data;
-          // console.log("isActive", isActive);
-          dispatch({
-            type: isActive ? "VIDEO_STARTED" : "VIDEO_STOPPED",
-          });
+          if (state.appState !== 4 && isActive)
+            dispatch({
+              type: "VIDEO_STARTED",
+            });
         }
       }, 5000);
     }
@@ -109,12 +113,21 @@ const CreatorPage: NextPage = () => {
     };
   }, [state.appState]);
 
+  const [refreshStream, setRefreshStream] = useState(false);
+  const handleToggleStream = () => {
+    // console.log("refreshStream", refreshStream);
+    setRefreshStream(!refreshStream);
+  };
+
   return (
     <AppLayout sections={[{ name: "Creator" }]}>
       <div className="md:flex m-4 mb-12">
         <div className="md:w-3/5 mb-8 md:mb-0 xl:mx-4 2xl:mx-8">
+          <div className="my-2 text-secondary font-bold text-lg">
+            CASTING PREVIEW
+          </div>
           <WebCam
-            streamKey={streamKey}
+            streamKey={state.streamKey}
             streamId={state.streamId}
             createNewStream={() => dispatch({ type: "CREATE_CLICKED" })}
             closeStream={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
@@ -124,8 +137,27 @@ const CreatorPage: NextPage = () => {
           <ChatBody />
         </div>
       </div>
+      {state.appState === APP_STATES.SHOW_VIDEO && (
+        <div className="m-4">
+          <div className="flex my-2  justify-between">
+            <div className="text-secondary font-bold text-lg">
+              STREAMING PREVIEW
+            </div>
+            <button
+              className="border border-secondary p-1 rounded font-semibold text-secondary hover:bg-secondary hover:text-backgroundDark"
+              onClick={() => handleToggleStream()}
+            >
+              refresh video
+            </button>
+          </div>
 
-      <VideoPreview state={state} setStreamKey={setStreamKey} />
+          <VideoPlayer
+            playbackId={`hls/${state.playbackId}`}
+            streamIsActive={state.streamIsActive}
+            refreshStream={refreshStream}
+          />
+        </div>
+      )}
     </AppLayout>
   );
 };

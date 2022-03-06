@@ -13,7 +13,7 @@ export type StreamCardProps = {
 };
 
 export const StreamCard = ({ stream }: StreamCardProps) => {
-  const { title, tokenId, playbackId } = stream;
+  const { title, tokenId, playbackId, type } = stream;
   return (
     <div className="m-4 p-2 rounded bg-backgroundLight text-secondary">
       <div className="text-center text-lg font-bold">{title}</div>
@@ -29,7 +29,7 @@ export const StreamCard = ({ stream }: StreamCardProps) => {
         </div>
       </div>
       <div className="flex content-center">
-        <Link href={`/viewer/${playbackId}`}>
+        <Link href={`/viewer/${playbackId}?type=${type}`}>
           <button className="font-bold w-1/2 py-1 mx-auto border uppercase border-secondary rounded bg-backgroundDark/30 hover:bg-secondary text-secondary hover:text-backgroundDark">
             {tokenId}
           </button>
