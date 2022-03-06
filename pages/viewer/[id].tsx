@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { withIronSessionSsr } from "iron-session/next";
-import { ironOptions } from "../../lib/session";
-import { AppLayout } from "../../components/layout";
-import { VideoPlayer } from "../../components/video";
-import { ChatBody } from "../../components/chat";
+import { ironOptions } from "lib/session";
+import { AppLayout } from "components/layout";
+import { VideoPlayer } from "components/video";
+import { ChatBody } from "components/chat";
 import { getStreamStatus, getSessionData } from "../../utils/apiFactory";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
@@ -31,6 +32,13 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
   const [userInput, setUserInput] = useState("");
   const [playbackId, setPlaybackId] = useState<string>("");
 
+  const router = useRouter();
+  const { id, type } = router.query;
+
+  console.log(id);
+
+  console.log(type);
+
   const handleCheckStream = () => {
     console.log("check stream");
     setPlaybackId(userInput);
@@ -55,7 +63,10 @@ const ViewerPage: NextPage<ViewerPageProps> = ({ video }) => {
         {video.confirmed && (
           <div className="md:flex">
             <div className="md:w-3/5">
-              <VideoPlayer playbackId={playbackId} streamIsActive={true} />
+              <VideoPlayer
+                playbackId={`${type}/${playbackId}`}
+                streamIsActive={true}
+              />
               <div className="flex my-8">
                 <div className="w-full mr-4">
                   <label htmlFor="playback-input" className="text-lg">

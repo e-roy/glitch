@@ -10,6 +10,7 @@ const streams = [
     thumbnail: "https://picsum.photos/200/300",
     tokenId: "1",
     playbackId: "1",
+    type: "recordings",
   },
   {
     id: "2",
@@ -18,6 +19,7 @@ const streams = [
     thumbnail: "https://picsum.photos/200/300",
     tokenId: "2",
     playbackId: "2",
+    type: "recordings",
   },
   {
     id: "3",
@@ -26,6 +28,7 @@ const streams = [
     thumbnail: "https://picsum.photos/200/300",
     tokenId: "3",
     playbackId: "3",
+    type: "recordings",
   },
   {
     id: "4",
@@ -34,6 +37,7 @@ const streams = [
     thumbnail: "https://picsum.photos/200/300",
     tokenId: "4",
     playbackId: "4",
+    type: "hls",
   },
   {
     id: "5",
@@ -42,12 +46,13 @@ const streams = [
     thumbnail: "https://picsum.photos/200/300",
     tokenId: "5",
     playbackId: "5",
+    type: "hls",
   },
 ];
 
 export type VideoListPageProps = {};
 
-const VideoListPage: NextPage<VideoListPageProps> = ({ }) => {
+const VideoListPage: NextPage<VideoListPageProps> = ({}) => {
   return (
     <AppLayout sections={[{ name: "User Feed" }]}>
       <div className="mx-24">
