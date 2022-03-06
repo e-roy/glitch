@@ -152,7 +152,7 @@ const CreatorPage: NextPage = () => {
           </div>
 
           <VideoPlayer
-            playbackId={state.playbackId}
+            playbackId={`hls/${state.playbackId}`}
             streamIsActive={state.streamIsActive}
             refreshStream={refreshStream}
           />

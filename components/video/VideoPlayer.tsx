@@ -20,7 +20,7 @@ export const VideoPlayer = ({
       const loadVideo = async () => {
         const video = document.getElementById("plyr") as HTMLVideoElement;
         var hls = new Hls();
-        hls.loadSource(`https://cdn.livepeer.com/hls/${playbackId}/index.m3u8`);
+        hls.loadSource(`https://cdn.livepeer.com/${playbackId}/index.m3u8`);
         hls.attachMedia(video);
         // @ts-ignore
         ref.current!.plyr.media = video;
