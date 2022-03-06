@@ -2,6 +2,8 @@ import { useSignMessage, useAccount, useNetwork } from "wagmi";
 import { SiweMessage } from "siwe";
 import { useRouter } from "next/router";
 
+const testContract = "0x25ed58c027921e14d86380ea2646e3a1b5c55a8b";
+
 export const SIWE = () => {
   const router = useRouter();
   const [{}, signMessage] = useSignMessage();
@@ -38,7 +40,7 @@ export const SIWE = () => {
         body: JSON.stringify({ message, signature: signRes.data }),
       });
       if (!verifyRes.ok) throw new Error("Error verifying message");
-      router.push("/dashboard");
+      router.push("/dashboard/0x25ed58c027921e14d86380ea2646e3a1b5c55a8b");
     } catch (error) {
       console.error(error);
     }
@@ -53,7 +55,7 @@ export const SIWE = () => {
 
   return (
     <button
-    className="px-8 py-4 border text-secondary border-secondary rounded bg-backgroundLight hover:bg-secondary hover:text-backgroundDark"
+      className="px-8 py-4 border text-secondary border-secondary rounded bg-backgroundLight hover:bg-secondary hover:text-backgroundDark"
       onClick={() => handleSignIn()}
     >
       Sign In with {formatAddress(accountData?.address)}
