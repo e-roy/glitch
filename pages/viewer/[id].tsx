@@ -34,7 +34,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
   }, [type]);
 
   return (
-    <AppLayout sections={[{ name: "Creator" }]}>
+    <AppLayout sections={[{ name: "Watch" }]}>
       <div className="m-4">
         <div className="md:flex">
           <div className="md:w-3/5">
