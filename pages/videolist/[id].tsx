@@ -8,6 +8,7 @@ import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import { useEffect, useReducer } from "react";
 import { useHash } from "hooks";
 import Gun from "gun";
+import { getStreamStatus } from "utils/apiFactory";
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
@@ -46,6 +47,9 @@ const reducer = (state: typeof initialState, stream: Stream) => {
   };
 };
 
+const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
+
+
 const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { hashedAddress } = useHash({ address: contractAddress });
@@ -54,21 +58,45 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
     fetchStreams();
   }, [hashedAddress]);
 
-  const fetchStreams = () => {
+  const fetchStreams = async () => {
     const streams = gun.get("contracts").get(hashedAddress).get("streams");
-    streams
-      .once()
-      .map()
-      .once((data?: Stream | Object) => {
-        if (
-          data &&
-          "active" in data &&
-          (data?.active || data.record) &&
-          !state.streams.find((s) => s.id === data.id)
-        ) {
-          dispatch(data);
-        }
-      });
+    streams.once().map().once((data?: Stream | Object) => {
+      if (
+         data && "active" in data &&
+        (data?.active || data?.record) &&
+        !state.streams.find((s) => s.id === data.id)
+      ) {
+        checkActive(data).then(active => {
+          if (active || data.record) {
+            dispatch({...data, active});
+          }
+        })
+      }
+    });
+  };
+
+  const checkActive = async (stream: Stream) => {
+    try {
+      const streamStatusResponse = await getStreamStatus(
+        livepeerApi,
+        stream.id
+      )
+  
+      const { isActive } = streamStatusResponse.data;
+      
+      if (!isActive) handleEndSession(stream)
+      return isActive
+    } catch (e) {
+      console.warn(e)
+      handleEndSession(stream)
+      return false
+    }
+  }
+
+  const handleEndSession = (stream: Stream) => {
+    gun.get(stream.id).put({
+      active: false,
+    });
   };
 
   return (

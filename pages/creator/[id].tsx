@@ -132,7 +132,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({
           state.streamId
         );
         if (streamStatusResponse.data) {
-          const { isActive, record } = streamStatusResponse.data;
+          const { isActive } = streamStatusResponse.data;
           if (state.appState !== 4 && isActive) {
             dispatch({
               type: "VIDEO_STARTED",

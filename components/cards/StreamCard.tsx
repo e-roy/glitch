@@ -16,7 +16,7 @@ export type StreamCardProps = {
 };
 
 export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
-  const { id, name, playbackId, active } = stream;
+  const { name, playbackId } = stream;  
 
   const getType = () => {
     if (stream.active) {
@@ -28,7 +28,7 @@ export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
 
   return (
     <div className="m-4 p-2 rounded bg-backgroundLight text-secondary">
-      {!!active && (
+      {!!stream.active && (
         <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
         </span>

@@ -183,7 +183,7 @@ export const StreamControls = ({
               htmlFor="description"
               className="block text-sm font-medium text-stone-200"
             >
-              Email
+              Description
             </label>
             <div className="mt-1 mb-4">
               <input
