@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SyntheticEvent } from "react";
 import { VideoCameraIcon, DesktopComputerIcon } from "@heroicons/react/outline";
 import { PlayIcon, RecordIcon, StopIcon } from "components/icons";
 import { Modal } from "components/elements";
@@ -38,7 +38,7 @@ export const StreamControls = ({
     description: description,
   };
 
-  const handleSubmitDetails = (e) => {
+  const handleSubmitDetails = (e: SyntheticEvent) => {
     e.preventDefault();
     setIsModalOpen(false);
   };

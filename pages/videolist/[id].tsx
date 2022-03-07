@@ -1,11 +1,11 @@
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import { ironOptions } from "lib/session";
-import { AppLayout } from "../../components/layout";
-import { StreamCard } from "../../components/cards";
+import { AppLayout } from "components/layout";
+import { StreamCard } from "components/cards";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useHash } from "hooks";
 import Gun from "gun";
 import { getStreamStatus } from "utils/apiFactory";
@@ -114,11 +114,16 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           </button>
         </div>
         <div className="flex flex-wrap">
-          {state.streams.sort((a, b) => a.createdAt - b.createdAt).map((stream, index) => (
-            <div key={index} className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4">
-              <StreamCard stream={stream} contractAddress={contractAddress} />
-            </div>
-          ))}
+          {state.streams
+            .sort((a, b) => a.createdAt - b.createdAt)
+            .map((stream, index) => (
+              <div
+                key={index}
+                className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4"
+              >
+                <StreamCard stream={stream} contractAddress={contractAddress} />
+              </div>
+            ))}
         </div>
       </div>
     </AppLayout>
