@@ -5,11 +5,20 @@ import { StreamControls } from "./";
 
 const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
+declare global {
+  interface Window {
+    stream?: any;
+  }
+}
+
 export type WebCamProps = {
   streamKey: string;
   streamId: string;
   createNewStream: () => void;
   closeStream: () => void;
+  startSession: (userInput: { title: string; description: string }) => void;
+  endSession: () => void;
+  handleRecordState: (record: boolean) => void;
 };
 
 export const WebCam = ({
@@ -17,6 +26,9 @@ export const WebCam = ({
   streamId,
   createNewStream,
   closeStream,
+  startSession,
+  endSession,
+  handleRecordState,
 }: WebCamProps) => {
   const videoEl = useRef<any>(null);
   const stream = useRef<any>(null);
@@ -29,7 +41,7 @@ export const WebCam = ({
     if (displayActive === "display") handleStartDisplay();
   }, [displayActive]);
 
-  const handleStartSession = async () => {
+  const handleStartSession = async (userInput: any) => {
     // console.log("handleStartSession");
     if (!stream.current) {
       alert("Video stream was not started.");
@@ -46,17 +58,20 @@ export const WebCam = ({
     session.on("open", () => {
       console.log("Stream started.");
       setStreamIsActive(true);
+      startSession(userInput);
       // alert("Stream started; visit Livepeer Dashboard.");
     });
 
     session.on("close", () => {
       console.log("Stream stopped.");
       setStreamIsActive(false);
+      endSession();
     });
 
     session.on("error", (err) => {
       console.log("Stream error.", err.message);
       setStreamIsActive(false);
+      endSession();
     });
   };
 
@@ -64,13 +79,14 @@ export const WebCam = ({
     // console.log("handleStopStream");
     // turn off camera and audio
     if (window.stream) {
-      window.stream.getTracks().forEach(function (track) {
+      window.stream.getTracks().forEach(function (track: any) {
         // console.log("track", track);
         track.stop();
       });
     }
     closeStream();
     setStreamIsActive(false);
+    endSession();
   };
 
   const handleStartCamera = async () => {
@@ -106,13 +122,14 @@ export const WebCam = ({
       videoEl.current.srcObject = stream.current;
       videoEl.current.play();
     } else {
+      alert("sorry, not supported by your browser");
       // fallback to getUserMedia
-      stream.current = await navigator.getDisplayMedia(
-        displayMediaStreamConstraints
-      );
-      window.stream = stream.current;
-      videoEl.current.srcObject = stream.current;
-      videoEl.current.play();
+      // stream.current = await navigator.getDisplayMedia(
+      //   displayMediaStreamConstraints
+      // );
+      // window.stream = stream.current;
+      // videoEl.current.srcObject = stream.current;
+      // videoEl.current.play();
     }
   };
 
@@ -123,19 +140,20 @@ export const WebCam = ({
       alert("Invalid streamKey.");
       return;
     }
-
     if (recordStatus) {
       setRecordStatus(false);
+      handleRecordState(false);
       await activateRecord(livepeerApi, streamId, false);
     } else {
       setRecordStatus(true);
+      handleRecordState(true);
       await activateRecord(livepeerApi, streamId, true);
     }
   };
 
   return (
     <div className="">
-      <div className=" rounded content-center justify-center min-h-96">
+      <div className="rounded content-center justify-center min-h-96">
         <video className="mx-auto h-100" ref={videoEl} />
       </div>
       <div>

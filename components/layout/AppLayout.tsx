@@ -8,8 +8,11 @@ type WebsiteLayoutProps = {
 export const AppLayout = ({ children, sections }: WebsiteLayoutProps) => {
   return (
     <div className="bg-backgroundDark min-h-screen text-stone-100 pb-12">
-      <AppHeader sections={sections} />
-      <main className="mt-8 h-full">{children}</main>
+      <AppHeader
+        sections={sections}
+        sectionsClassName="font-oxanium font-bold text-5xl"
+      />
+      <main className="mt-4 h-full">{children}</main>
     </div>
   );
 };

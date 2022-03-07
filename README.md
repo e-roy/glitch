@@ -58,11 +58,18 @@ Here's an overview of the included frameworks and tools.
 
 Technologies we wanted to use and explore but couldn’t:
 
-.
 
 - **Filebase**
 - **Drip Network by Radicle**
 
+
+If the project stays running then we have plans to make it better with future plans also.
+
+
+
+
+
+# Run it locally
 
 
 Download all the dependencies needed to run the project by running `yarn`.
