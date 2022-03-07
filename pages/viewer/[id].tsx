@@ -9,18 +9,21 @@ import { VideoPlayer } from "components/video";
 import { ChatBody } from "components/chat";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
+import { getSessionData } from "utils/apiFactory";
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
   `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
 );
 
+const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
+
 export type ViewerPageProps = {};
 
 const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
   const router = useRouter();
   const { streamId, playbackId, type } = router.query;
-
+  const [sessionId, setSessionId] = useState<string>()
   const [playbackType, setPlaybackType] = useState<string>("");
 
   const [refreshStream, setRefreshStream] = useState(false);
@@ -31,8 +34,21 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
   useEffect(() => {
     if (type) {
       setPlaybackType(type as string);
+      if (type === "recordings") {
+        getRecordings()
+      }
     }
   }, [type]);
+
+  const getRecordings = async () => {
+    try {
+      const res = await getSessionData(livepeerApi, streamId as string)
+      console.log(res.data?.[0])
+      setSessionId(`${type}/${res?.data?.[0]?.id}`)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <AppLayout sections={[{ name: "Watch" }]}>
@@ -54,7 +70,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
                 </div>
 
                 <VideoPlayer
-                  playbackId={`${playbackType}/${playbackId}`}
+                  playbackId={sessionId ? sessionId : `${playbackType}/${playbackId}`}
                   streamIsActive={true}
                   refreshStream={refreshStream}
                 />
