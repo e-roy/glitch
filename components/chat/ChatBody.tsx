@@ -2,7 +2,6 @@ import { useEffect, useReducer, useState } from "react";
 import { ChatMessage, ChatMessageInput } from "./";
 import { v4 as uuidv4 } from 'uuid';
 import Gun from "gun";
-import { useAccount } from "wagmi";
 import { useUser } from "hooks";
 
 const gun = Gun({
