@@ -5,6 +5,12 @@ import { StreamControls } from "./";
 
 const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
+declare global {
+  interface Window {
+    stream?: any;
+  }
+}
+
 export type WebCamProps = {
   streamKey: string;
   streamId: string;
@@ -146,7 +152,7 @@ export const WebCam = ({
 
   return (
     <div className="">
-      <div className=" rounded content-center justify-center min-h-96">
+      <div className="rounded content-center justify-center min-h-96">
         <video className="mx-auto h-100" ref={videoEl} />
       </div>
       <div>
