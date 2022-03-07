@@ -10,7 +10,7 @@ export type WebCamProps = {
   streamId: string;
   createNewStream: () => void;
   closeStream: () => void;
-  startSession: () => void;
+  startSession: (userInput: { title: string; description: string }) => void;
   endSession: () => void;
   handleRecordState: (record: boolean) => void;
 };
@@ -22,7 +22,7 @@ export const WebCam = ({
   closeStream,
   startSession,
   endSession,
-  handleRecordState
+  handleRecordState,
 }: WebCamProps) => {
   const videoEl = useRef<any>(null);
   const stream = useRef<any>(null);
@@ -35,7 +35,7 @@ export const WebCam = ({
     if (displayActive === "display") handleStartDisplay();
   }, [displayActive]);
 
-  const handleStartSession = async () => {
+  const handleStartSession = async (userInput: any) => {
     // console.log("handleStartSession");
     if (!stream.current) {
       alert("Video stream was not started.");
@@ -52,7 +52,7 @@ export const WebCam = ({
     session.on("open", () => {
       console.log("Stream started.");
       setStreamIsActive(true);
-      startSession();
+      startSession(userInput);
       // alert("Stream started; visit Livepeer Dashboard.");
     });
 
