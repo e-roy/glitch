@@ -79,7 +79,7 @@ export const WebCam = ({
     // console.log("handleStopStream");
     // turn off camera and audio
     if (window.stream) {
-      window.stream.getTracks().forEach(function (track) {
+      window.stream.getTracks().forEach(function (track: any) {
         // console.log("track", track);
         track.stop();
       });
@@ -122,13 +122,14 @@ export const WebCam = ({
       videoEl.current.srcObject = stream.current;
       videoEl.current.play();
     } else {
+      alert("sorry, not supported by your browser");
       // fallback to getUserMedia
-      stream.current = await navigator.getDisplayMedia(
-        displayMediaStreamConstraints
-      );
-      window.stream = stream.current;
-      videoEl.current.srcObject = stream.current;
-      videoEl.current.play();
+      // stream.current = await navigator.getDisplayMedia(
+      //   displayMediaStreamConstraints
+      // );
+      // window.stream = stream.current;
+      // videoEl.current.srcObject = stream.current;
+      // videoEl.current.play();
     }
   };
 

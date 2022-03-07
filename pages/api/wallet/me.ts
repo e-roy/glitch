@@ -1,9 +1,11 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
-import { ironOptions } from "../../../lib/session";
+import { ironOptions } from "lib/session";
+import { IronSessionOptions } from "iron-session";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
+
   switch (method) {
     case "GET":
       res.send({ address: req.session.siwe?.address });
@@ -14,4 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default withIronSessionApiRoute(handler, ironOptions);
+export default withIronSessionApiRoute(
+  handler,
+  ironOptions as IronSessionOptions
+);

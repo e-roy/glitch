@@ -1,10 +1,8 @@
 import Image from "next/image";
-import walletIcon from "./WalletIcon.png";
-import dashLine from "./dashLine.png";
-import paste from "./paste.png";
-import createWatch from "./create-watch.png";
-import giveRec from "./giveRec.png";
-import ellipse from "./Ellipse.png";
+import walletIcon from "/WalletIcon.png";
+import dashLine from "/dashLine.png";
+import createWatch from "/create-watch.png";
+import giveRec from "/giveRec.png";
 
 export const HowItWorks = () => (
   <div
@@ -21,7 +19,7 @@ export const HowItWorks = () => (
     <div className="flex self-center">
       <div className="walletIcon px-3.5">
         <Image
-          src={walletIcon}
+          src="/WalletIcon.png"
           width={70}
           height={70}
           alt="Wallet Icon"
@@ -34,7 +32,7 @@ export const HowItWorks = () => (
 
       <div className="arrowIcon py-3.5">
         <Image
-          src={dashLine}
+          src="/dashLine.png"
           width={70}
           height={0}
           alt="Arrow Icon"
@@ -44,7 +42,7 @@ export const HowItWorks = () => (
 
       <div className="createWatch px-3.5">
         <Image
-          src={createWatch}
+          src="/create-watch.png"
           width={70}
           height={70}
           alt="Watch Icon"
@@ -55,7 +53,7 @@ export const HowItWorks = () => (
 
       <div className="arrowIcon py-3.5">
         <Image
-          src={dashLine}
+          src="/dashLine.png"
           width={70}
           height={0}
           alt="Arrow Icon"
@@ -65,7 +63,7 @@ export const HowItWorks = () => (
 
       <div className="giveRec px-3.5">
         <Image
-          src={giveRec}
+          src="/giveRec.png"
           width={70}
           height={70}
           alt="GiveRec Icon"

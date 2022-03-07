@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { withIronSessionSsr } from "iron-session/next";
+import { IronSessionOptions } from "iron-session";
 import { ironOptions } from "lib/session";
 import { AppLayout } from "components/layout";
 import { VideoPlayer } from "components/video";
@@ -61,7 +62,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
             )}
           </div>
           <div className="md:w-2/5 md:pl-4 lg:pl-16">
-            <ChatBody streamId={streamId as string}/>
+            <ChatBody streamId={streamId as string} />
           </div>
         </div>
       </div>
@@ -85,7 +86,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     };
   }
   // set contract address
-  const contractAddress = params.id;
+  const contractAddress = params?.id;
   // get logged in user
   const userAddress = req.session.siwe.address;
   // get user's ethereum NFTs
@@ -111,4 +112,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: {},
   };
 },
-ironOptions);
+ironOptions as IronSessionOptions);

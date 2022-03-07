@@ -1,4 +1,5 @@
 import { withIronSessionSsr } from "iron-session/next";
+import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
 import { useState, useEffect, useReducer } from "react";
 import { ironOptions } from "lib/session";
@@ -209,7 +210,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({
           />
         </div>
         <div className="md:w-2/5 md:pl-4 lg:pl-16 xl:mx-4 2xl:mx-8">
-          <ChatBody streamId={state.streamId}/>
+          <ChatBody streamId={state.streamId} />
         </div>
       </div>
       {state.appState === APP_STATES.SHOW_VIDEO && (
@@ -253,7 +254,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     };
   }
   // set contract address
-  const contractAddress = params.id;
+  const contractAddress = params?.id;
   // get logged in user
   const userAddress = req.session.siwe.address;
   // get user's ethereum NFTs
@@ -279,4 +280,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { contractAddress, userAddress },
   };
 },
-ironOptions);
+ironOptions as IronSessionOptions);

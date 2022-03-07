@@ -1,8 +1,9 @@
 import { AppLayout } from "components/layout";
 import { withIronSessionSsr } from "iron-session/next";
+import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { ironOptions } from "lib/session";
+import { ironOptions, withSession } from "lib/session";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
@@ -74,7 +75,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     };
   }
   // set contract address
-  const contractAddress = params.id;
+  const contractAddress = params?.id;
   // get logged in user
   const userAddress = req.session.siwe.address;
   // get user's ethereum NFTs
@@ -100,4 +101,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { contractAddress },
   };
 },
-ironOptions);
+ironOptions as IronSessionOptions);
