@@ -65,6 +65,7 @@ export const WebCam = ({
     session.on("error", (err) => {
       console.log("Stream error.", err.message);
       setStreamIsActive(false);
+      endSession();
     });
   };
 
