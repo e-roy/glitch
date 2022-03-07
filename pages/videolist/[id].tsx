@@ -1,14 +1,13 @@
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import { ironOptions } from "lib/session";
-import { AppLayout } from "../../components/layout";
-import { StreamCard } from "../../components/cards";
+import { AppLayout } from "components/layout";
+import { StreamCard } from "components/cards";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useHash } from "hooks";
 import Gun from "gun";
-import { TRUE } from "sass";
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
@@ -57,15 +56,19 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
 
   const fetchStreams = () => {
     const streams = gun.get("contracts").get(hashedAddress).get("streams");
-    streams.once().map().once((data?: Stream | Object) => {
-      if (
-         data && "active" in data &&
-        (data?.active || data.record) &&
-        !state.streams.find((s) => s.id === data.id)
-      ) {
-        dispatch(data);
-      }
-    });
+    streams
+      .once()
+      .map()
+      .once((data?: Stream | Object) => {
+        if (
+          data &&
+          "active" in data &&
+          (data?.active || data.record) &&
+          !state.streams.find((s) => s.id === data.id)
+        ) {
+          dispatch(data);
+        }
+      });
   };
 
   return (
@@ -83,11 +86,16 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           </button>
         </div>
         <div className="flex flex-wrap">
-          {state.streams.sort((a, b) => a.createdAt - b.createdAt).map((stream, index) => (
-            <div key={index} className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4">
-              <StreamCard stream={stream} contractAddress={contractAddress} />
-            </div>
-          ))}
+          {state.streams
+            .sort((a, b) => a.createdAt - b.createdAt)
+            .map((stream, index) => (
+              <div
+                key={index}
+                className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4"
+              >
+                <StreamCard stream={stream} contractAddress={contractAddress} />
+              </div>
+            ))}
         </div>
       </div>
     </AppLayout>
