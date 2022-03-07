@@ -4,6 +4,7 @@ import { PlayIcon, PauseIcon, StopIcon } from "components/icons";
 type Stream = {
   id: string;
   name?: string;
+  description?: string;
   playbackId: string;
   record: boolean | null;
   active: boolean | null;
@@ -16,7 +17,7 @@ export type StreamCardProps = {
 };
 
 export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
-  const { name, playbackId } = stream;  
+  const { name, description, playbackId } = stream;  
 
   const getType = () => {
     if (stream.active) {
@@ -34,6 +35,7 @@ export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
         </span>
       )}
       <div className="text-center text-lg font-bold">{name}</div>
+      <div className="text-center text-md text-secondary">{description}</div>
       <div className="flex my-12 text-backgroundLight justify-center">
         <div className="rounded-full bg-secondary py-2 w-7 flex justify-center mx-2">
           <PlayIcon />
