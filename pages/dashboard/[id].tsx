@@ -2,7 +2,7 @@ import { AppLayout } from "components/layout";
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { ironOptions } from "../../lib/session";
+import { ironOptions } from "lib/session";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
@@ -15,7 +15,11 @@ import Image from "next/image";
 import videocam from "./video-cam.png";
 import streamimg from "./stream-img.png";
 
-const DashboardPage: NextPage = ({ contractAddress }) => {
+export type DashboardPageProps = {
+  contractAddress: string;
+};
+
+const DashboardPage: NextPage<DashboardPageProps> = ({ contractAddress }) => {
   return (
     <AppLayout sections={[{ name: "Dashboard" }]}>
       <div className="m-4 flex justify-center">

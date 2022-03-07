@@ -1,26 +1,26 @@
 import { ChangeEvent, useState, KeyboardEvent } from "react";
 
 type ChatMessageInputProps = {
-  onClick: (message: string) => void
-}
+  onClick: (message: string) => void;
+};
 
-export const ChatMessageInput = ({onClick}: ChatMessageInputProps) => {
-  const [message, setMessage] = useState('')
+export const ChatMessageInput = ({ onClick }: ChatMessageInputProps) => {
+  const [message, setMessage] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value)
-  }
+    setMessage(e.target.value);
+  };
 
   const handleClick = () => {
-    onClick(message)
-    setMessage('')
-  }
+    onClick(message);
+    setMessage("");
+  };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => { 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
-      handleClick()
+      handleClick();
     }
-  }
+  };
 
   return (
     <div className="flex rounded bg-transparent text-backgroundLight">
@@ -32,7 +32,11 @@ export const ChatMessageInput = ({onClick}: ChatMessageInputProps) => {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
-      <button type="button" onClick={handleClick} className="font-black mx-2 p-4 w-20 border border-secondary rounded-lg bg-secondary hover:bg-backgroundLight hover:text-secondary ">
+      <button
+        type="button"
+        onClick={handleClick}
+        className="font-black mx-2 py-2 px-4 w-20 border border-secondary rounded-lg bg-secondary hover:bg-backgroundLight hover:text-secondary "
+      >
         Send
       </button>
     </div>
