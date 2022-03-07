@@ -1,4 +1,5 @@
 import { withIronSessionSsr } from "iron-session/next";
+import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
 import { ironOptions } from "lib/session";
 import { AppLayout } from "components/layout";
@@ -49,7 +50,6 @@ const reducer = (state: typeof initialState, stream: Stream) => {
 
 const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
-
 const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { hashedAddress } = useHash({ address: contractAddress });
@@ -60,19 +60,23 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
 
   const fetchStreams = async () => {
     const streams = gun.get("contracts").get(hashedAddress).get("streams");
-    streams.once().map().once((data?: Stream | Object) => {
-      if (
-         data && "active" in data &&
-        (data?.active || data?.record) &&
-        !state.streams.find((s) => s.id === data.id)
-      ) {
-        checkActive(data).then(active => {
-          if (active || data.record) {
-            dispatch({...data, active});
-          }
-        })
-      }
-    });
+    streams
+      .once()
+      .map()
+      .once((data?: Stream | Object) => {
+        if (
+          data &&
+          "active" in data &&
+          (data?.active || data?.record) &&
+          !state.streams.find((s) => s.id === data.id)
+        ) {
+          checkActive(data).then((active) => {
+            if (active || data.record) {
+              dispatch({ ...data, active });
+            }
+          });
+        }
+      });
   };
 
   const checkActive = async (stream: Stream) => {
@@ -80,18 +84,18 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
       const streamStatusResponse = await getStreamStatus(
         livepeerApi,
         stream.id
-      )
-  
+      );
+
       const { isActive } = streamStatusResponse.data;
-      
-      if (!isActive) handleEndSession(stream)
-      return isActive
+
+      if (!isActive) handleEndSession(stream);
+      return isActive;
     } catch (e) {
-      console.warn(e)
-      handleEndSession(stream)
-      return false
+      console.warn(e);
+      handleEndSession(stream);
+      return false;
     }
-  }
+  };
 
   const handleEndSession = (stream: Stream) => {
     gun.get(stream.id).put({
@@ -146,7 +150,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     };
   }
   // set contract address
-  const contractAddress = params.id;
+  const contractAddress = params?.id;
   // get logged in user
   const userAddress = req.session.siwe.address;
   // get user's ethereum NFTs
@@ -172,4 +176,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { contractAddress },
   };
 },
-ironOptions);
+ironOptions as IronSessionOptions);
