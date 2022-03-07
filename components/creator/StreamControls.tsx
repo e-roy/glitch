@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { VideoCameraIcon, DesktopComputerIcon } from "@heroicons/react/outline";
 import { PlayIcon, RecordIcon, StopIcon } from "components/icons";
+import { Modal } from "components/elements";
 
 export type StreamControlsProps = {
   createNewStream: () => void;
   handleStopStream: () => void;
   handleRecord: () => void;
-  handleStartSession: () => void;
+  handleStartSession: (userInput: {}) => void;
   handleContent: (content: string) => void;
   streamIsActive: boolean;
   setStreamIsActive: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,12 +22,25 @@ export const StreamControls = ({
   streamIsActive,
   setStreamIsActive,
 }: StreamControlsProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [displayActive, setDisplayActive] = useState("");
   const [sessionIsActive, setSessionIsActive] = useState(false);
   const [recordIsActive, setRecordIsActive] = useState(false);
 
   const classNames = (...classes: unknown[]) => {
     return classes.filter(Boolean).join(" ");
+  };
+
+  const userInput = {
+    title: title,
+    description: description,
+  };
+
+  const handleSubmitDetails = (e) => {
+    e.preventDefault();
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -78,7 +92,7 @@ export const StreamControls = ({
                     className="rounded-full border-2 border-secondary bg-secondary hover:bg-backgroundLight text-backgroundLight hover:text-secondary py-2 pl-1 w-10 flex justify-center mx-2"
                     onClick={() => {
                       setSessionIsActive(true);
-                      handleStartSession();
+                      handleStartSession(userInput);
                     }}
                   >
                     <PlayIcon size={18} />
@@ -135,6 +149,7 @@ export const StreamControls = ({
               onClick={() => {
                 createNewStream();
                 setStreamIsActive(true);
+                setIsModalOpen(true);
               }}
               className="font-bold w-36 py-2 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark"
             >
@@ -143,6 +158,56 @@ export const StreamControls = ({
           </div>
         </>
       )}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className="bg-backgroundLight p-4">
+          <form onSubmit={handleSubmitDetails}>
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-stone-200"
+            >
+              Title
+            </label>
+            <div className="mt-1 mb-4">
+              <input
+                type="text"
+                name="title"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="p-2 border shadow-sm block w-full sm:text-sm border-gray-300 rounded-md"
+                placeholder="title"
+                required
+              />
+            </div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-stone-200"
+            >
+              Email
+            </label>
+            <div className="mt-1 mb-4">
+              <input
+                type="text"
+                name="description"
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="p-2 border shadow-sm block w-full sm:text-sm border-gray-300 rounded-md"
+                placeholder="description"
+                required
+              />
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="border border-secondary py-1 px-2 rounded font-semibold text-secondary hover:bg-secondary hover:text-backgroundDark"
+              >
+                Create
+              </button>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };

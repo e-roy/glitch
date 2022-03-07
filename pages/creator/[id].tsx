@@ -83,9 +83,13 @@ const reducer = (state: any, action: any) => {
 
 type CreatorPageProps = {
   contractAddress: string;
+  userAddress: string;
 };
 
-const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
+const CreatorPage: NextPage<CreatorPageProps> = ({
+  contractAddress,
+  userAddress,
+}) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const { hashedAddress } = useHash({ address: contractAddress });
   useEffect(() => {
@@ -149,14 +153,18 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
     setRefreshStream(!refreshStream);
   };
 
-  const handleStartSession = async () => {
-    const { streamId: id, record, createdAt, name, playbackId } = state;
-
-    console.log("state", state);
+  const handleStartSession = async (userInput: {
+    title: string;
+    description: string;
+  }) => {
+    const { streamId: id, record, createdAt, playbackId } = state;
+    const { title, description } = userInput;
 
     const stream = gun.get(state.streamId).put({
       id,
-      name,
+      name: title,
+      description: description,
+      userAddress,
       playbackId,
       record,
       active: true,
@@ -193,9 +201,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({ contractAddress }) => {
             streamId={state.streamId}
             createNewStream={() => dispatch({ type: "CREATE_CLICKED" })}
             closeStream={() => dispatch({ type: "RESET_DEMO_CLICKED" })}
-            startSession={() => {
-              handleStartSession();
-            }}
+            startSession={handleStartSession}
             endSession={() => {
               handleEndSession();
             }}
@@ -270,7 +276,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({
   }
 
   return {
-    props: { contractAddress },
+    props: { contractAddress, userAddress },
   };
 },
 ironOptions);
