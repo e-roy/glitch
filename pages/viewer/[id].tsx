@@ -32,9 +32,10 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
 
   useEffect(() => {
     if (type) {
-      setPlaybackType(type as string);
       if (type === "recordings") {
         getRecordings()
+      } else {
+        setPlaybackType(type as string);
       }
     }
   }, [type]);
