@@ -6,7 +6,6 @@ import { ironOptions } from "lib/session";
 import { AppLayout } from "components/layout";
 import { VideoPlayer } from "components/video";
 import { ChatBody } from "components/chat";
-import { getStreamStatus, getSessionData } from "../../utils/apiFactory";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
@@ -19,7 +18,7 @@ export type ViewerPageProps = {};
 
 const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
   const router = useRouter();
-  const { playbackId, type } = router.query;
+  const { streamId, playbackId, type } = router.query;
 
   const [playbackType, setPlaybackType] = useState<string>("");
 
@@ -35,7 +34,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
   }, [type]);
 
   return (
-    <AppLayout sections={[{ name: "Creator" }]}>
+    <AppLayout sections={[{ name: "Watch" }]}>
       <div className="m-4">
         <div className="md:flex">
           <div className="md:w-3/5">
@@ -62,7 +61,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
             )}
           </div>
           <div className="md:w-2/5 md:pl-4 lg:pl-16">
-            <ChatBody />
+            <ChatBody streamId={streamId as string}/>
           </div>
         </div>
       </div>

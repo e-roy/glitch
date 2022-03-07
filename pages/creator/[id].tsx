@@ -209,7 +209,7 @@ const CreatorPage: NextPage<CreatorPageProps> = ({
           />
         </div>
         <div className="md:w-2/5 md:pl-4 lg:pl-16 xl:mx-4 2xl:mx-8">
-          <ChatBody />
+          <ChatBody streamId={state.streamId}/>
         </div>
       </div>
       {state.appState === APP_STATES.SHOW_VIDEO && (

@@ -46,8 +46,7 @@ export const AppHeader = ({ sections = defaultSections, sectionsClassName }: App
       <div id="sections" className="md:block hidden">
         <ul className={`flex text-gray-100 space-x-8 ${sectionsClassName ?? ''}`}>
           {sections.map((section, index) => (
-
-            <li key={index} className="hover:text-secondary hover:underline decoration-secondary underline-offset-4 hover:cursor-pointer">
+            <li key={index} className={section?.id && `hover:text-secondary hover:underline decoration-secondary underline-offset-4 hover:cursor-pointer`}>
               <a href={section?.id}>{section.name}</a>
             </li>
           ))}

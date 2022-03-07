@@ -7,7 +7,7 @@ type UseHashProps = {
 }
 
 export const useHash = ({ address, hash }: UseHashProps) => {
-	const secret = process.env.SECRET || "diego"
+	const secret = process.env.SECRET || "coolstreams"
 	const [hashedAddress, setHashedAddress] = useState('')
 	const [isEqual, setIsEqual] = useState(false)
 
