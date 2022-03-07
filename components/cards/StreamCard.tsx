@@ -47,7 +47,7 @@ export const StreamCard = ({ stream, contractAddress }: StreamCardProps) => {
       </div>
       <div className="flex content-center">
         <Link
-          href={`/viewer/${contractAddress}?type=${getType()}&playbackId=${playbackId}`}
+          href={`/viewer/${contractAddress}?streamId=${stream.id}&type=${getType()}&playbackId=${playbackId}`}
         >
           <button className="font-bold w-1/2 py-1 mx-auto border uppercase border-secondary rounded bg-backgroundDark/30 hover:bg-secondary text-secondary hover:text-backgroundDark">
             Go to {getType() === "hls" ? "stream" : "recording"}
