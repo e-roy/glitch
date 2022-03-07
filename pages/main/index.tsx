@@ -2,17 +2,36 @@ import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
 import { ironOptions } from "lib/session";
 import { AppLayout } from "components/layout";
-import Link from "next/link";
+import { NftCard } from "components/cards/NftCard";
 
-const MainPage: NextPage = () => {
+import { createAlchemyWeb3 } from "@alch/alchemy-web3";
+
+const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
+const alchemyETH = createAlchemyWeb3(
+  `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
+);
+
+const contracts = ["0x25ed58c027921e14d86380ea2646e3a1b5c55a8b"];
+
+export type MainPageProps = {
+  matchedNfts: Array<string>;
+};
+
+const MainPage: NextPage<MainPageProps> = ({ matchedNfts }) => {
   return (
     <AppLayout sections={[{ name: "Dashboard" }]}>
-      <div>main page</div>
-      <Link href={"/dashboard/0x25ed58c027921e14d86380ea2646e3a1b5c55a8b"}>
-        <button className="font-bold w-36 py-2 mx-auto border rounded text-sm hover:text-secondary border-secondary hover:bg-backgroundLight bg-secondary text-backgroundDark">
-          Developer DAO
-        </button>
-      </Link>
+      <div className="m-4">
+        <div className="flex flex-wrap">
+          {matchedNfts.map((nft, index) => (
+            <div
+              key={index}
+              className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6 my-4"
+            >
+              <NftCard nft={nft} />
+            </div>
+          ))}
+        </div>
+      </div>
     </AppLayout>
   );
 };
@@ -32,8 +51,19 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     };
   }
 
+  // get logged in user
+  const userAddress = req.session.siwe.address;
+  // get user's ethereum NFTs
+  const ethNfts = await alchemyETH.alchemy.getNfts({
+    owner: userAddress,
+  });
+  // filter matching NFTs tokens for Contract
+  const matchedNfts = ethNfts.ownedNfts.filter((nft: any) => {
+    return nft.contract.address === contracts[0];
+  });
+
   return {
-    props: {},
+    props: { matchedNfts },
   };
 },
 ironOptions);
