@@ -40,7 +40,7 @@ export const SIWE = () => {
         body: JSON.stringify({ message, signature: signRes.data }),
       });
       if (!verifyRes.ok) throw new Error("Error verifying message");
-      router.push("/dashboard/0x25ed58c027921e14d86380ea2646e3a1b5c55a8b");
+      router.push("/main");
     } catch (error) {
       console.error(error);
     }
