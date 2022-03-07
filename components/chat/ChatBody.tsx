@@ -3,6 +3,7 @@ import { ChatMessage, ChatMessageInput } from "./";
 import { v4 as uuidv4 } from 'uuid';
 import Gun from "gun";
 import { useAccount } from "wagmi";
+import { useUser } from "hooks";
 
 const gun = Gun({
   peers: ["https://glitch-gun-peer.herokuapp.com/gun"]
@@ -35,23 +36,23 @@ type ChatBodyProps = {
 
 export const ChatBody = ({streamId}: ChatBodyProps) => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [{ data: accountData }] = useAccount();
+  const {address} = useUser();
 
   useEffect(() => {
     if (streamId) {
       const gunMessages = gun.get(streamId).get('messages')
-      gunMessages.map().on(message => {
-        dispatch(message)
+      gunMessages.map().once(message => {
+        dispatch(message as any)
       })
     }
   }, [streamId])
 
-  const handleNewMessage = (message: string) => {
+  const handleNewMessage = (message: string) => {    
     if (streamId) {
       const gunMessages = gun.get(streamId).get('messages')
       const newMessage: Message = {
         id: uuidv4(),
-        userAddress: accountData?.address!,
+        userAddress: address!,
         value: message,
         createdAt: Date.now()
       }
