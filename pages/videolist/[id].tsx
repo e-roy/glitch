@@ -1,5 +1,4 @@
 import { withIronSessionSsr } from "iron-session/next";
-import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
 import { ironOptions } from "@/lib/session";
 import { AppLayout } from "@/components/layout";
@@ -176,4 +175,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { contractAddress },
   };
 },
-ironOptions as IronSessionOptions);
+ironOptions);
