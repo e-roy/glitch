@@ -52,6 +52,8 @@ const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { hashedAddress } = useHash({ address: contractAddress });
+  console.log(contractAddress);
+  console.log(hashedAddress);
 
   // useEffect(() => {
   //   fetchStreams();
