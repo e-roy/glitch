@@ -58,6 +58,7 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   }, [hashedAddress]);
 
   const fetchStreams = async () => {
+    console.log("fetching streams");
     const streams = gun.get("contracts").get(hashedAddress).get("streams");
     streams
       .once()
