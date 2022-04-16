@@ -19,9 +19,9 @@ export type VideoListPageProps = {
   contractAddress: string;
 };
 
-const gun = Gun({
-  peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
-});
+// const gun = Gun({
+//   peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+// });
 
 type Stream = {
   id: string;
@@ -53,30 +53,30 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { hashedAddress } = useHash({ address: contractAddress });
 
-  useEffect(() => {
-    fetchStreams();
-  }, [hashedAddress]);
+  // useEffect(() => {
+  //   fetchStreams();
+  // }, [hashedAddress]);
 
   const fetchStreams = async () => {
     console.log("fetching streams");
-    const streams = gun.get("contracts").get(hashedAddress).get("streams");
-    streams
-      .once()
-      .map()
-      .once((data?: Stream | Object) => {
-        if (
-          data &&
-          "active" in data &&
-          (data?.active || data?.record) &&
-          !state.streams.find((s) => s.id === data.id)
-        ) {
-          checkActive(data).then((active) => {
-            if (active || data.record) {
-              dispatch({ ...data, active });
-            }
-          });
-        }
-      });
+    // const streams = gun.get("contracts").get(hashedAddress).get("streams");
+    // streams
+    //   .once()
+    //   .map()
+    //   .once((data?: Stream | Object) => {
+    //     if (
+    //       data &&
+    //       "active" in data &&
+    //       (data?.active || data?.record) &&
+    //       !state.streams.find((s) => s.id === data.id)
+    //     ) {
+    //       checkActive(data).then((active) => {
+    //         if (active || data.record) {
+    //           dispatch({ ...data, active });
+    //         }
+    //       });
+    //     }
+    //   });
   };
 
   const checkActive = async (stream: Stream) => {
