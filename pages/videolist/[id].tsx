@@ -98,9 +98,9 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   };
 
   const handleEndSession = (stream: Stream) => {
-    gun.get(stream.id).put({
-      active: false,
-    });
+    // gun.get(stream.id).put({
+    //   active: false,
+    // });
   };
 
   return (
