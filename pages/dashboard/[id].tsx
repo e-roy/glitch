@@ -1,9 +1,8 @@
-import { AppLayout } from "components/layout";
+import { AppLayout } from "@/components/layout";
 import { withIronSessionSsr } from "iron-session/next";
-import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
 import Link from "next/link";
-import { ironOptions, withSession } from "lib/session";
+import { ironOptions } from "@/lib/session";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 
@@ -101,4 +100,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { contractAddress },
   };
 },
-ironOptions as IronSessionOptions);
+ironOptions);
