@@ -1,9 +1,9 @@
 import { withIronSessionSsr } from "iron-session/next";
 import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
-import { ironOptions } from "lib/session";
-import { AppLayout } from "components/layout";
-import { NftCard } from "components/cards/NftCard";
+import { ironOptions } from "@/lib/session";
+import { AppLayout } from "@/components/layout";
+import { NftCard } from "@/components/cards/NftCard";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 

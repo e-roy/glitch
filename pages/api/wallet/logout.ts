@@ -16,7 +16,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default withIronSessionApiRoute(
-  handler,
-  ironOptions as IronSessionOptions
-);
+export default withIronSessionApiRoute(handler, ironOptions);

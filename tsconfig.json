@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -16,9 +17,9 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["/*"]
+      "@/*": ["*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/session.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "additional.d.ts"],
   "exclude": ["node_modules"]
 }

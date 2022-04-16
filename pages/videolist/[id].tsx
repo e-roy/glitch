@@ -1,15 +1,15 @@
 import { withIronSessionSsr } from "iron-session/next";
 import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
-import { ironOptions } from "lib/session";
-import { AppLayout } from "components/layout";
-import { StreamCard } from "components/cards";
+import { ironOptions } from "@/lib/session";
+import { AppLayout } from "@/components/layout";
+import { StreamCard } from "@/components/cards";
 
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import { useEffect, useReducer } from "react";
 import { useHash } from "hooks";
 import Gun from "gun";
-import { getStreamStatus } from "utils/apiFactory";
+import { getStreamStatus } from "@/utils/apiFactory";
 
 const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
