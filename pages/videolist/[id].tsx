@@ -55,9 +55,9 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   console.log(contractAddress);
   console.log(hashedAddress);
 
-  // useEffect(() => {
-  //   fetchStreams();
-  // }, [hashedAddress]);
+  useEffect(() => {
+    if (hashedAddress) fetchStreams();
+  }, [hashedAddress]);
 
   const fetchStreams = async () => {
     console.log("fetching streams");
