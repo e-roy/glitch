@@ -142,16 +142,20 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           </button>
         </div>
         <div className="flex flex-wrap">
-          {/* {state.streams
-            .sort((a, b) => b.createdAt - a.createdAt)
-            .map((stream, index) => (
-              <div
-                key={index}
-                className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4"
-              >
-                <StreamCard stream={stream} contractAddress={contractAddress} />
-              </div>
-            ))} */}
+          {state.streams &&
+            state.streams
+              .sort((a, b) => b.createdAt - a.createdAt)
+              .map((stream, index) => (
+                <div
+                  key={index}
+                  className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4"
+                >
+                  <StreamCard
+                    stream={stream}
+                    contractAddress={contractAddress}
+                  />
+                </div>
+              ))}
         </div>
       </div>
     </AppLayout>
