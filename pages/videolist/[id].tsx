@@ -1,5 +1,7 @@
 import { withIronSessionSsr } from "iron-session/next";
 import type { NextPage } from "next";
+// import dynamic from "next/dynamic";
+
 import { ironOptions } from "@/lib/session";
 import { AppLayout } from "@/components/layout";
 import { StreamCard } from "@/components/cards";
@@ -15,13 +17,22 @@ const alchemyETH = createAlchemyWeb3(
   `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
 );
 
+// // @ts-ignore
+// const Gun = dynamic(
+//   // @ts-ignore
+//   () => import("gun"),
+//   {
+//     ssr: false,
+//   }
+// );
+
 export type VideoListPageProps = {
   contractAddress: string;
 };
 
-const gun = Gun({
-  peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
-});
+// const gun = Gun({
+//   peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+// });
 
 type Stream = {
   id: string;
@@ -55,6 +66,12 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   console.log(contractAddress);
   console.log(hashedAddress);
 
+  const gun = Gun({
+    peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+  });
+
+  console.log(gun);
+
   useEffect(() => {
     if (hashedAddress) fetchStreams();
   }, [hashedAddress]);
@@ -62,6 +79,7 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const fetchStreams = async () => {
     console.log("fetching streams");
     const streams = gun.get("contracts").get(hashedAddress).get("streams");
+    console.log(streams);
     streams
       .once()
       .map()
@@ -72,7 +90,9 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           (data?.active || data?.record) &&
           !state.streams.find((s) => s.id === data.id)
         ) {
+          console.log("adding stream");
           checkActive(data).then((active) => {
+            console.log(data);
             if (active || data.record) {
               dispatch({ ...data, active });
             }
@@ -105,6 +125,8 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
     });
   };
 
+  console.log(state.streams);
+
   return (
     <AppLayout sections={[{ name: "User Feed" }]}>
       <div className="mx-24">
@@ -120,7 +142,7 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           </button>
         </div>
         <div className="flex flex-wrap">
-          {state.streams
+          {/* {state.streams
             .sort((a, b) => b.createdAt - a.createdAt)
             .map((stream, index) => (
               <div
@@ -129,7 +151,7 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
               >
                 <StreamCard stream={stream} contractAddress={contractAddress} />
               </div>
-            ))}
+            ))} */}
         </div>
       </div>
     </AppLayout>
