@@ -50,7 +50,7 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
   }, [streamId]);
 
   useEffect(() => {
-    if (state.messages) {
+    if (state.messages && state.messages.length > 0) {
       if (messageNumber !== state.messages.length) {
         setMessageNumber(state.messages.length);
         dummy.current?.scrollIntoView({ behavior: "smooth" });
