@@ -42,7 +42,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
   const getRecordings = async () => {
     try {
       const res = await getSessionData(livepeerApi, streamId as string);
-      console.log(res.data?.[0]);
+      // console.log(res.data?.[0]);
       setSessionId(`${type}/${res?.data?.[0]?.id}`);
     } catch (e) {
       console.log(e);
@@ -80,9 +80,9 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
               </div>
             )}
           </div>
-          {/* <div className="md:w-2/5 md:pl-4 lg:pl-16">
+          <div className="md:w-2/5 md:pl-4 lg:pl-16">
             <ChatBody streamId={streamId as string} />
-          </div> */}
+          </div>
         </div>
       </div>
     </AppLayout>

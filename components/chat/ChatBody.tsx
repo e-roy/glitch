@@ -77,9 +77,10 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
       </div>
 
       <div className="my-4 p-4 bg-backgroundLight rounded h-96 overflow-y-auto">
-        {state.messages.map((message, index) => (
-          <ChatMessage key={index} message={message} />
-        ))}
+        {state.messages &&
+          state.messages.map((message, index) => (
+            <ChatMessage key={index} message={message} />
+          ))}
         <div ref={dummy} />
       </div>
 
