@@ -30,24 +30,24 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
     setRefreshStream(!refreshStream);
   };
 
-  // useEffect(() => {
-  //   if (type) {
-  //     setPlaybackType(type as string);
-  //     if (type === "recordings") {
-  //       getRecordings();
-  //     }
-  //   }
-  // }, [type]);
+  useEffect(() => {
+    if (type) {
+      setPlaybackType(type as string);
+      if (type === "recordings") {
+        getRecordings();
+      }
+    }
+  }, [type]);
 
-  // const getRecordings = async () => {
-  //   try {
-  //     const res = await getSessionData(livepeerApi, streamId as string);
-  //     console.log(res.data?.[0]);
-  //     setSessionId(`${type}/${res?.data?.[0]?.id}`);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const getRecordings = async () => {
+    try {
+      const res = await getSessionData(livepeerApi, streamId as string);
+      console.log(res.data?.[0]);
+      setSessionId(`${type}/${res?.data?.[0]?.id}`);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <AppLayout sections={[{ name: "Watch" }]}>
@@ -68,7 +68,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
                   </button>
                 </div>
 
-                {/* {playbackType && playbackId && (
+                {playbackType && playbackId && (
                   <VideoPlayer
                     playbackId={
                       sessionId ? sessionId : `${playbackType}/${playbackId}`
@@ -76,13 +76,13 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
                     streamIsActive={true}
                     refreshStream={refreshStream}
                   />
-                )} */}
+                )}
               </div>
             )}
           </div>
-          <div className="md:w-2/5 md:pl-4 lg:pl-16">
+          {/* <div className="md:w-2/5 md:pl-4 lg:pl-16">
             <ChatBody streamId={streamId as string} />
-          </div>
+          </div> */}
         </div>
       </div>
     </AppLayout>
