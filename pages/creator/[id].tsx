@@ -1,5 +1,4 @@
 import { withIronSessionSsr } from "iron-session/next";
-import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
 import { useState, useEffect, useReducer } from "react";
 import { ironOptions } from "lib/session";
@@ -18,10 +17,6 @@ const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
 const alchemyETH = createAlchemyWeb3(
   `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
 );
-
-const gun = Gun({
-  peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
-});
 
 const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 
@@ -93,6 +88,11 @@ const CreatorPage: NextPage<CreatorPageProps> = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
   const { hashedAddress } = useHash({ address: contractAddress });
+
+  const gun = Gun({
+    peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+  });
+
   useEffect(() => {
     if (state.appState === APP_STATES.CREATING_STREAM) {
       // console.log("creating stream");
@@ -280,4 +280,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { contractAddress, userAddress },
   };
 },
-ironOptions as IronSessionOptions);
+ironOptions);

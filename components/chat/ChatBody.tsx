@@ -4,10 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import Gun from "gun";
 import { useUser } from "hooks";
 
-const gun = Gun({
-  peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
-});
-
 type Message = {
   id: string;
   userAddress: string;
@@ -38,10 +34,14 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
   const [messageNumber, setMessageNumber] = useState(0);
   const { address } = useUser();
 
+  const gun = Gun({
+    peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+  });
+
   const dummy = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (streamId) {
+    if (streamId && gun) {
       const gunMessages = gun.get(streamId).get("messages");
       gunMessages.map().once((message) => {
         dispatch(message as any);
@@ -50,7 +50,7 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
   }, [streamId]);
 
   useEffect(() => {
-    if (state.messages) {
+    if (state.messages && state.messages.length > 0) {
       if (messageNumber !== state.messages.length) {
         setMessageNumber(state.messages.length);
         dummy.current?.scrollIntoView({ behavior: "smooth" });
@@ -70,6 +70,7 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
       gunMessages.set(newMessage);
     }
   };
+  if (!streamId) return null;
   return (
     <div className="h-full rounded">
       <div className="p-4 bg-backgroundLight rounded font-bold text-secondary">
@@ -77,9 +78,10 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
       </div>
 
       <div className="my-4 p-4 bg-backgroundLight rounded h-96 overflow-y-auto">
-        {state.messages.map((message, index) => (
-          <ChatMessage key={index} message={message} />
-        ))}
+        {state.messages &&
+          state.messages.map((message, index) => (
+            <ChatMessage key={index} message={message} />
+          ))}
         <div ref={dummy} />
       </div>
 

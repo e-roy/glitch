@@ -1,6 +1,7 @@
 import { withIronSessionSsr } from "iron-session/next";
-import { IronSessionOptions } from "iron-session";
 import type { NextPage } from "next";
+// import dynamic from "next/dynamic";
+
 import { ironOptions } from "@/lib/session";
 import { AppLayout } from "@/components/layout";
 import { StreamCard } from "@/components/cards";
@@ -16,13 +17,22 @@ const alchemyETH = createAlchemyWeb3(
   `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
 );
 
+// // @ts-ignore
+// const Gun = dynamic(
+//   // @ts-ignore
+//   () => import("gun"),
+//   {
+//     ssr: false,
+//   }
+// );
+
 export type VideoListPageProps = {
   contractAddress: string;
 };
 
-const gun = Gun({
-  peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
-});
+// const gun = Gun({
+//   peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+// });
 
 type Stream = {
   id: string;
@@ -53,13 +63,21 @@ const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { hashedAddress } = useHash({ address: contractAddress });
+  // console.log(contractAddress);
+  // console.log(hashedAddress);
+
+  const gun = Gun({
+    peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+  });
 
   useEffect(() => {
-    fetchStreams();
+    if (hashedAddress && gun) fetchStreams();
   }, [hashedAddress]);
 
   const fetchStreams = async () => {
+    // console.log("fetching streams");
     const streams = gun.get("contracts").get(hashedAddress).get("streams");
+    // console.log(streams);
     streams
       .once()
       .map()
@@ -70,7 +88,9 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           (data?.active || data?.record) &&
           !state.streams.find((s) => s.id === data.id)
         ) {
+          // console.log("adding stream");
           checkActive(data).then((active) => {
+            // console.log(data);
             if (active || data.record) {
               dispatch({ ...data, active });
             }
@@ -103,6 +123,8 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
     });
   };
 
+  // console.log(state.streams);
+
   return (
     <AppLayout sections={[{ name: "User Feed" }]}>
       <div className="mx-24">
@@ -118,16 +140,20 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           </button>
         </div>
         <div className="flex flex-wrap">
-          {state.streams
-            .sort((a, b) => b.createdAt - a.createdAt)
-            .map((stream, index) => (
-              <div
-                key={index}
-                className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4"
-              >
-                <StreamCard stream={stream} contractAddress={contractAddress} />
-              </div>
-            ))}
+          {state.streams &&
+            state.streams
+              .sort((a, b) => b.createdAt - a.createdAt)
+              .map((stream, index) => (
+                <div
+                  key={index}
+                  className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 my-4"
+                >
+                  <StreamCard
+                    stream={stream}
+                    contractAddress={contractAddress}
+                  />
+                </div>
+              ))}
         </div>
       </div>
     </AppLayout>
@@ -176,4 +202,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { contractAddress },
   };
 },
-ironOptions as IronSessionOptions);
+ironOptions);

@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { withIronSessionSsr } from "iron-session/next";
-import { IronSessionOptions } from "iron-session";
 import { ironOptions } from "lib/session";
 import { AppLayout } from "components/layout";
 import { VideoPlayer } from "components/video";
@@ -23,7 +22,7 @@ export type ViewerPageProps = {};
 const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
   const router = useRouter();
   const { streamId, playbackId, type } = router.query;
-  const [sessionId, setSessionId] = useState<string>()
+  const [sessionId, setSessionId] = useState<string>();
   const [playbackType, setPlaybackType] = useState<string>("");
 
   const [refreshStream, setRefreshStream] = useState(false);
@@ -35,20 +34,20 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
     if (type) {
       setPlaybackType(type as string);
       if (type === "recordings") {
-        getRecordings()
+        getRecordings();
       }
     }
   }, [type]);
 
   const getRecordings = async () => {
     try {
-      const res = await getSessionData(livepeerApi, streamId as string)
-      console.log(res.data?.[0])
-      setSessionId(`${type}/${res?.data?.[0]?.id}`)
+      const res = await getSessionData(livepeerApi, streamId as string);
+      // console.log(res.data?.[0]);
+      setSessionId(`${type}/${res?.data?.[0]?.id}`);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
+  };
 
   return (
     <AppLayout sections={[{ name: "Watch" }]}>
@@ -69,11 +68,15 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
                   </button>
                 </div>
 
-                <VideoPlayer
-                  playbackId={sessionId ? sessionId : `${playbackType}/${playbackId}`}
-                  streamIsActive={true}
-                  refreshStream={refreshStream}
-                />
+                {playbackType && playbackId && (
+                  <VideoPlayer
+                    playbackId={
+                      sessionId ? sessionId : `${playbackType}/${playbackId}`
+                    }
+                    streamIsActive={true}
+                    refreshStream={refreshStream}
+                  />
+                )}
               </div>
             )}
           </div>
@@ -128,4 +131,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: {},
   };
 },
-ironOptions as IronSessionOptions);
+ironOptions);
