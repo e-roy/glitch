@@ -30,24 +30,24 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
     setRefreshStream(!refreshStream);
   };
 
-  useEffect(() => {
-    if (type) {
-      setPlaybackType(type as string);
-      if (type === "recordings") {
-        getRecordings();
-      }
-    }
-  }, [type]);
+  // useEffect(() => {
+  //   if (type) {
+  //     setPlaybackType(type as string);
+  //     if (type === "recordings") {
+  //       getRecordings();
+  //     }
+  //   }
+  // }, [type]);
 
-  const getRecordings = async () => {
-    try {
-      const res = await getSessionData(livepeerApi, streamId as string);
-      console.log(res.data?.[0]);
-      setSessionId(`${type}/${res?.data?.[0]?.id}`);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const getRecordings = async () => {
+  //   try {
+  //     const res = await getSessionData(livepeerApi, streamId as string);
+  //     console.log(res.data?.[0]);
+  //     setSessionId(`${type}/${res?.data?.[0]?.id}`);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return (
     <AppLayout sections={[{ name: "Watch" }]}>
