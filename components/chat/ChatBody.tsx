@@ -70,6 +70,7 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
       gunMessages.set(newMessage);
     }
   };
+  if (!streamId) return null;
   return (
     <div className="h-full rounded">
       <div className="p-4 bg-backgroundLight rounded font-bold text-secondary">
