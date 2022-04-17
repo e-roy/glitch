@@ -63,23 +63,21 @@ const livepeerApi = process.env.NEXT_PUBLIC_LIVEPEER_API as string;
 const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { hashedAddress } = useHash({ address: contractAddress });
-  console.log(contractAddress);
-  console.log(hashedAddress);
+  // console.log(contractAddress);
+  // console.log(hashedAddress);
 
   const gun = Gun({
     peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
   });
-
-  console.log(gun);
 
   useEffect(() => {
     if (hashedAddress) fetchStreams();
   }, [hashedAddress]);
 
   const fetchStreams = async () => {
-    console.log("fetching streams");
+    // console.log("fetching streams");
     const streams = gun.get("contracts").get(hashedAddress).get("streams");
-    console.log(streams);
+    // console.log(streams);
     streams
       .once()
       .map()
@@ -90,9 +88,9 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
           (data?.active || data?.record) &&
           !state.streams.find((s) => s.id === data.id)
         ) {
-          console.log("adding stream");
+          // console.log("adding stream");
           checkActive(data).then((active) => {
-            console.log(data);
+            // console.log(data);
             if (active || data.record) {
               dispatch({ ...data, active });
             }
@@ -125,7 +123,7 @@ const VideoListPage: NextPage<VideoListPageProps> = ({ contractAddress }) => {
     });
   };
 
-  console.log(state.streams);
+  // console.log(state.streams);
 
   return (
     <AppLayout sections={[{ name: "User Feed" }]}>
