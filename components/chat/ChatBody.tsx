@@ -41,7 +41,7 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
   const dummy = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (streamId) {
+    if (streamId && gun) {
       const gunMessages = gun.get(streamId).get("messages");
       gunMessages.map().once((message) => {
         dispatch(message as any);
