@@ -68,7 +68,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
                   </button>
                 </div>
 
-                {playbackType && playbackId && (
+                {/* {playbackType && playbackId && (
                   <VideoPlayer
                     playbackId={
                       sessionId ? sessionId : `${playbackType}/${playbackId}`
@@ -76,7 +76,7 @@ const ViewerPage: NextPage<ViewerPageProps> = ({}) => {
                     streamIsActive={true}
                     refreshStream={refreshStream}
                   />
-                )}
+                )} */}
               </div>
             )}
           </div>
