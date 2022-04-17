@@ -4,10 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import Gun from "gun";
 import { useUser } from "hooks";
 
-const gun = Gun({
-  peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
-});
-
 type Message = {
   id: string;
   userAddress: string;
@@ -37,6 +33,10 @@ export const ChatBody = ({ streamId }: ChatBodyProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [messageNumber, setMessageNumber] = useState(0);
   const { address } = useUser();
+
+  const gun = Gun({
+    peers: ["https://glitch-gun-peer.herokuapp.com/gun"],
+  });
 
   const dummy = useRef<HTMLHeadingElement>(null);
 
